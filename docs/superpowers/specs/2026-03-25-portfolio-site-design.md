@@ -11,7 +11,7 @@ Single HTML file, top to bottom:
 ### 1. Hero Section
 - Name: "Baird MA"
 - Title: "Frontend Engineer"
-- Links: GitHub (https://github.com/ShunRenMa), LinkedIn (URL TBD from user)
+- Links: GitHub (https://github.com/ShunRenMa), LinkedIn (https://www.linkedin.com/in/shun-ren-ma-94b42815a/)
 - Centered, large typography, minimal
 
 ### 2. Works Section
@@ -73,13 +73,28 @@ Single HTML file, top to bottom:
 - GIF paths: `works_photo/gif/*.gif`
 - PNG paths: `works_photo/jpg/*.png` (note: `jpg/` directory name is a misnomer; it contains PNG files)
 
+### Data-Driven Cards
+- Works data stored as a JS array in `index.html`, separate from the rendering logic
+- Each entry: `{ img, title, desc }`
+- JS loop generates card HTML from this array at page load
+- To update content, only the data array needs to change — no HTML editing required
+
+```js
+const works = [
+  { img: "works_photo/gif/3d_gallery.gif", title: "...", desc: "..." },
+  { img: "works_photo/gif/superlike.gif", title: "...", desc: "..." },
+  { img: "works_photo/gif/hit_v.gif", title: "...", desc: "..." },
+  { img: "works_photo/gif/hor.gif", title: "...", desc: "..." },
+  { img: "works_photo/gif/spider_man.gif", title: "...", desc: "..." },
+  { img: "works_photo/gif/hit.gif", title: "...", desc: "..." },
+  { img: "works_photo/jpg/Door.png", title: "...", desc: "..." },
+  { img: "works_photo/jpg/bottom.png", title: "...", desc: "..." },
+];
+```
+
 ## Content TBD (from user)
 
-- LinkedIn URL
-- Title and description for each of the 8 works
-- Each card needs:
-  - `title`: short project name (e.g., "3D Gallery Ad")
-  - `description`: one line about tech/purpose (e.g., "Interactive 3D product showcase using CSS transforms")
+- Title and description for each of the 8 works (placeholder text will be used initially)
 
 ## Out of Scope (for now)
 

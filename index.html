@@ -21,6 +21,16 @@
   </script>
   <style>
     body { background-color: #0a0a0a; }
+
+    .card-hidden {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .card-visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
   </style>
 </head>
 <body class="font-sans text-white min-h-screen">
@@ -60,7 +70,8 @@
 
   works.forEach((work, i) => {
     const card = document.createElement("div");
-    card.className = "bg-[#1a1a1a] rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300";
+    card.className = "bg-[#1a1a1a] rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 card-hidden";
+    card.dataset.index = i;
     card.innerHTML = `
       <img src="${work.img}" alt="${work.title}" class="w-full" loading="lazy">
       <div class="p-4">
@@ -70,6 +81,32 @@
     `;
     grid.appendChild(card);
   });
+
+  function getColumns() {
+    if (window.innerWidth >= 1024) return 3;
+    if (window.innerWidth >= 640) return 2;
+    return 1;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const card = entry.target;
+          const index = parseInt(card.dataset.index);
+          const cols = getColumns();
+          const colPosition = index % cols;
+          card.style.transitionDelay = `${colPosition * 150}ms`;
+          card.classList.remove("card-hidden");
+          card.classList.add("card-visible");
+          observer.unobserve(card);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  grid.querySelectorAll(".card-hidden").forEach((card) => observer.observe(card));
 </script>
 
 </body>

@@ -26,9 +26,8 @@ works.forEach((work, i) => {
 });
 
 function getColumns() {
-  if (window.innerWidth >= 1024) return 3;
-  if (window.innerWidth >= 640) return 2;
-  return 1;
+  const gridStyle = getComputedStyle(grid);
+  return gridStyle.gridTemplateColumns.split(" ").length;
 }
 
 const observer = new IntersectionObserver(

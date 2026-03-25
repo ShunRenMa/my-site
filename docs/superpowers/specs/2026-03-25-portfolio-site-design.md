@@ -16,7 +16,7 @@ Single HTML file, top to bottom:
 
 ### 2. Works Section
 - Section heading: "Works"
-- 3-column grid (desktop) → 2-column (tablet) → 1-column (mobile)
+- 3-column grid (desktop) → 2-column (tablet) → 1-column (mobile), max-width container (`max-w-6xl`) to prevent over-stretching on wide screens
 - 8 project cards total, displayed in this order (left to right, top to bottom):
   1. 3d_gallery.gif
   2. superlike.gif
@@ -65,13 +65,13 @@ Single HTML file, top to bottom:
 - When card enters viewport, add class that triggers:
   - `opacity: 0 → 1`
   - `translateY: 20px → 0`
-  - `transition-delay`: 0ms, 150ms, 300ms for 1st, 2nd, 3rd card in each row
+  - `transition-delay`: based on card's visual column position (`index % columns * 150ms`), adapts per breakpoint (3-col: 0/150/300ms, 2-col: 0/150ms, 1-col: 0ms)
 - No external animation library needed
 
 ### Assets
 - Images served from local `works_photo/` directory
 - GIF paths: `works_photo/gif/*.gif`
-- PNG paths: `works_photo/jpg/*.png`
+- PNG paths: `works_photo/jpg/*.png` (note: `jpg/` directory name is a misnomer; it contains PNG files)
 
 ## Content TBD (from user)
 

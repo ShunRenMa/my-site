@@ -45,7 +45,7 @@ Single HTML file, top to bottom:
 ## Technical Decisions
 
 ### Stack
-- **Pure HTML + Tailwind CSS v4 (CDN)** — no build tools, no framework
+- **Pure HTML + Tailwind CSS v3 Play CDN** (`cdn.tailwindcss.com`) — no build tools, no framework
 - **Single file**: `index.html`
 - **Google Fonts**: Inter (sans-serif) for English, system fallback for Chinese
 

@@ -26,10 +26,14 @@
       opacity: 0;
       transform: translateY(20px);
     }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     .card-visible {
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      animation: fadeInUp 0.6s ease both;
     }
   </style>
 </head>
@@ -98,10 +102,10 @@
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const card = entry.target;
-          const index = parseInt(card.dataset.index);
+          const index = Number(card.dataset.index);
           const cols = getColumns();
           const colPosition = index % cols;
-          card.style.transitionDelay = `${colPosition * 150}ms`;
+          card.style.animationDelay = `${colPosition * 150}ms`;
           card.classList.remove("card-hidden");
           card.classList.add("card-visible");
           observer.unobserve(card);

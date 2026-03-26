@@ -1,12 +1,12 @@
 const works = [
-  { img: "works_photo/gif/3d_gallery.gif", title: "3D Gallery Ad", desc: "Interactive 3D product showcase", ratio: "9/20" },
-  { img: "works_photo/gif/superlike.gif", title: "Superlike Ad", desc: "Animated floating hearts interaction", ratio: "9/20" },
-  { img: "works_photo/gif/hit_v.gif", title: "Hit Vertical Ad", desc: "Vertical interstitial with scroll integration", ratio: "9/20" },
-  { img: "works_photo/gif/hor.gif", title: "Horizontal Ad", desc: "Horizontal banner with news feed integration", ratio: "9/20" },
-  { img: "works_photo/gif/spider_man.gif", title: "Spider-Man Ad", desc: "Character-driven interactive banner", ratio: "9/20" },
-  { img: "works_photo/gif/hit.gif", title: "Hit Ad", desc: "Animated interstitial advertisement", ratio: "9/20" },
-  { img: "works_photo/jpg/Door.png", title: "Door Ad", desc: "Full-page takeover creative" },
-  { img: "works_photo/jpg/bottom.png", title: "Bottom Banner", desc: "Sticky bottom banner layout" },
+  { img: "works_photo/gif/spider_man.gif", title: "Spider-Man Ad", desc: "第一個與設計共同配合發想的格式，使用 WebGL 渲染技術加上特殊格式影片做出在網頁上呈現的 透明影片效果。", ratio: "9/20" },
+  { img: "works_photo/gif/3d_gallery.gif", title: "3D Gallery Ad", desc: "第一個獨立學習使用 WebGL 開發出來的格式，根本上的展演與 CSS 視覺上略有不同。", ratio: "9/20" },
+  { img: "works_photo/gif/superlike.gif", title: "Superlike Ad", desc: "以短影片為主題所做出的。", ratio: "9/20" },
+  { img: "works_photo/gif/hit.gif", title: "Interactive Ad", desc: "三秒蓋板動畫加上可互動式 Banner，主打滑主頁面時能一邊瀏覽又能一邊與廣告互動。", ratio: "9/20" },
+  { img: "works_photo/gif/hit_v.gif", title: "Interactive Video Ad", desc: "與前者相同，但差別在此處的 Banner 內包含了 Video，如何對齊是數學的奧妙。", ratio: "9/20" },
+  { img: "works_photo/gif/hor.gif", title: "Bottom Cover Ad", desc: "手機置底半蓋板，按了下之後還有較小的 Banner 出現，大幅提升點擊率的戰略產品。", ratio: "9/20" },
+  { img: "works_photo/jpg/Door.png", title: "Desktop Door Ad", desc: "桌機格式做過最滿意的作品，這個產品讓設計可以完全發揮把視覺全部連接起來，實際呈現非常有氣勢。" },
+  { img: "works_photo/jpg/bottom.png", title: "Desktop Bottom Banner", desc: "桌機置底格式，保留了幾乎不干擾閱讀又能展現漂亮廣告的彈性。" },
 ];
 
 const grid = document.getElementById("works-grid");

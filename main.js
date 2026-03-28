@@ -13,7 +13,7 @@ const grid = document.getElementById("works-grid");
 
 works.forEach((work, i) => {
   const card = document.createElement("div");
-  const spanClass = work.span ? `col-span-${work.span}` : "";
+  const spanClass = work.span ? `md:col-span-${work.span}` : "";
   card.className = `bg-[#1a1a1a] rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 card-hidden ${spanClass}`;
   card.dataset.index = i;
   card.innerHTML = `

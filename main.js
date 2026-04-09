@@ -7,6 +7,7 @@ const works = [
   { img: "works_photo/gif/hor.gif", title: "Bottom Cover Ad", desc: "手機置底半蓋板，按了下之後還有較小的 Banner 出現，大幅提升點擊率的戰略產品。", ratio: "9/20" },
   { img: "works_photo/jpg/Door.png", title: "Desktop Door Ad", desc: "桌機格式做過最滿意的作品，這個產品讓設計可以完全發揮把視覺全部連接起來，實際呈現非常有氣勢。", span: 2,ratio: "1920/1080" },
   { img: "works_photo/jpg/bottom.png", title: "Desktop Bottom Banner", desc: "桌機置底格式，保留了幾乎不干擾閱讀又能展現漂亮廣告的彈性。", span: 2 ,ratio: "1920/1080"},
+  { img: "works_photo/jpg/fullway.png", title: "Website for fullway", desc: "https://www.fullwaymarine.com.tw/ 此網頁為友情支援，因只需要一頁低成本所以只用了簡單的 github page + Cloudflare + HTML 製作而成。", span: 2 ,ratio: "1920/1080"},
 ];
 
 const grid = document.getElementById("works-grid");

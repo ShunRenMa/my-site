@@ -7,8 +7,11 @@
 
 <style scoped>
     nav {
-        background-color: #f0ffdd;
+        background-color: transparent;
         padding: 1rem;
         text-align: center;
+        position: fixed;
+        z-index: 2147483647;
+        width: 100vw;
     }
 </style>

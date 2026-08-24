@@ -40,7 +40,10 @@ const navArray = [
 					<div :class="itemContentClass">
 						<ul>
 							<li v-for="(item, i) in arrayElement" :key="i">
-								<a :href="item.url" target="_blank" rel="noopener">{{
+								<NuxtLink v-if="item.url.startsWith('/')" :to="item.url">{{
+									item.name
+								}}</NuxtLink>
+								<a v-else :href="item.url" target="_blank" rel="noopener">{{
 									item.name
 								}}</a>
 							</li>

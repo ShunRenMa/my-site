@@ -1,10 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const route = useRoute()
+</script>
 
 <template>
 	<div>
-		<TheNav />
-		<slot />
-		<TheFooter />
+		<Transition name="page" appear>
+			<div :key="route.fullPath">
+				<TheNav />
+				<slot />
+				<TheFooter />
+			</div>
+		</Transition>
 		<TheCousor />
 	</div>
 </template>

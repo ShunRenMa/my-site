@@ -152,7 +152,9 @@ onBeforeUnmount(() => {
 	--cursor-color: #7d97b8;
 	--cursor-size: 50px;
 	--cursor-size-hover: 80px;
+	--cursor-size-link: 24px;
 	--cursor-dot-size: 14px;
+	--cursor-dot-size-link: 8px;
 
 	position: fixed;
 	top: 0;
@@ -162,7 +164,7 @@ onBeforeUnmount(() => {
 	pointer-events: none;
 	user-select: none;
 	opacity: 0;
-	transition: opacity 0.4s linear;
+	transition: opacity 0.2s linear;
 }
 
 .cursor.is-visible {
@@ -225,6 +227,26 @@ onBeforeUnmount(() => {
 
 .cursor.is-hovered .cursor__dot > i {
 	opacity: 0;
+}
+
+/* 連結／按鈕：圈縮小。
+   .cursor 跟被 hover 的 <a> 是兄弟分支下的遠親，一般組合器接不到，
+   所以從 html 這層用 :has() 往下選。
+   :not(.is-hovered) = 有標 data-cursor 時讓 JS 那套贏，兩邊不打架 */
+.has-custom-cursor:has(a[href]:hover, button:hover)
+	.cursor:not(.is-hovered)
+	.cursor__frame {
+	width: var(--cursor-size-link);
+	height: var(--cursor-size-link);
+}
+
+/* 圈縮到 24px 時，14px 的點會塞滿內圈變成實心球，縮成準心 */
+.has-custom-cursor:has(a[href]:hover, button:hover)
+	.cursor:not(.is-hovered)
+	.cursor__dot
+	> i {
+	width: var(--cursor-dot-size-link);
+	height: var(--cursor-dot-size-link);
 }
 
 /* fit：尺寸由 JS 寫入，這裡只負責把圓角拿掉 */

@@ -112,4 +112,7 @@ a:hover::after {
 	transform: scaleX(1);
 	transform-origin: left; /* 進入時的起點 */
 }
+.nav_item {
+	flex: 1;
+}
 </style>

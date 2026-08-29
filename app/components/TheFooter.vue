@@ -96,6 +96,15 @@ a {
 	position: relative;
 	text-decoration: none;
 }
+/* 看不見的感應區，把 hover 熱區上下各撐 25%，總高變 150% */
+a::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: -25%;
+	width: 100%;
+	height: 150%;
+}
 a::after {
 	content: '';
 	position: absolute;

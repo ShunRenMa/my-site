@@ -4,7 +4,7 @@ const layoutClass = 'layout'
 
 <template>
 	<div :class="layoutClass">
-		<section class="hero block">
+		<section class="hero hero_block">
 			<div class="hero_content">
 				<span class="hero_title_fst">Made In Taiwan.</span>
 				<span class="hero_title_sec">Building For The World.</span>
@@ -17,37 +17,71 @@ const layoutClass = 'layout'
 					fetchpriority="high"
 				/>
 			</div>
-			<div class="hero_profile">
+			<!-- <div class="hero_profile">
 				<img
 					src="~/assets/images/profile1.jpg"
 					alt="profile image"
 					class="hero_profile_img"
 					fetchpriority="high"
 				/>
-			</div>
+			</div> -->
 		</section>
 
 		<div class="profile block">
 			<div class="profile_img_wrapper">
-				<img
-					src="~/assets/images/profile2.jpg"
-					alt="profile image"
-					class="profile_img"
-					fetchpriority="high"
-				/>
+				<div>
+					<img
+						src="~/assets/images/profile2.jpg"
+						alt="profile image"
+						class="profile_img"
+						fetchpriority="high"
+					/>
+				</div>
 			</div>
-			<div class="profile_content"></div>
+			<div class="profile_content">
+				<h1>
+					Hi, I Am Baird. <br />
+					A Frontend Engineer.
+				</h1>
+				<span class="content_sm block">
+					Born in 1995,based in Taipei. I speak Mandarin, English, and Japanese
+					(JLPT N1).
+					<br />
+					7 years into frontend, five of them in digital advertising.
+					<br />
+					bridge design and engineering with TypeScript to deliver interfaces
+					that feel effortless to use.（With plenty of help from AI, of
+					course.）
+					<br />
+					And when something gets repetitive or annoying enough, I usually end
+					up make a tool for it.
+				</span>
+				<span class="content_sm block">
+					A reliable partner in bringing ideas to life.
+				</span>
+				<span class="content_sm block">
+					As a Senior Frontend Engineer and Development Manager（a five-person
+					team）, I also care about teams work together.
+					<br />
+					putting the right people on the right problems. I believe Good
+					products come from people who are set up to do their best work.
+				</span>
+				<span class="content_sm block">
+					BTW. I built the website from Vue + Nuxt.
+				</span>
+				<span class="smooth_line"></span>
+				<span class="skill_title">
+					<h2>My Skill</h2>
+				</span>
+				<span class="content_sm block skill"> </span>
+				<span class="content_sm block"> </span>
+			</div>
 		</div>
 	</div>
 </template>
 
 <style scoped>
-.layout {
-	/* 這頁的左右留白。定在頁面根節點，底下的區塊都繼承得到 */
-	--gutter: 4vw;
-}
-
-.block {
+.hero_block {
 	display: block;
 	width: 100%;
 	height: 105vh;
@@ -127,16 +161,64 @@ const layoutClass = 'layout'
 }
 
 .profile {
-	width: 100%;
-	height: 100vh;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr); /* 跟 footer 同欄數 */
+	width: 92vw; /* 跟 footer 同容器 */
+	margin: 0 auto;
+	align-items: start; /* 關鍵，grid 預設 stretch */
+	padding: 8vw 0;
+	height: auto;
 	background-color: transparent;
 }
 
 .profile_img_wrapper {
-	width: 30vw;
-	left: var(--gutter);
-	overflow: hidden;
+	grid-column: 1 / 3; /* 佔前兩欄，約 36.8vw */
 	position: sticky;
-	z-index: 1000;
+	top: 4vw;
+}
+
+.profile_content {
+	grid-column: 3 / -1; /* 從 GITHUB 那欄起算 */
+	min-height: 150vh;
+}
+.profile_content h1 {
+	font-size: 3em;
+}
+.profile_img {
+	width: 26vw;
+}
+
+.content_sm {
+	font-size: 1.2em;
+	color: #0000009c;
+}
+
+.smooth_line {
+	display: block;
+	width: 100%;
+	height: 1px;
+	margin-top: 1em;
+	background-color: var(--line);
+}
+
+.profile {
+	view-timeline: --p block;
+}
+
+.profile_img_wrapper {
+	position: sticky;
+	top: 4vw;
+	animation: img-drift linear both;
+	animation-timeline: --p; /* 用 .profile 的進出視窗進度 */
+	animation-range: contain 0% contain 100%;
+}
+
+.skill h1 {
+	margin: 0;
+}
+@keyframes img-drift {
+	to {
+		transform: translateY(80px);
+	}
 }
 </style>

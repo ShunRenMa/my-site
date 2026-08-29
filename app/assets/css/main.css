@@ -1,11 +1,13 @@
 /* 全域樣式與設計 token。在 nuxt.config.ts 的 css 陣列註冊，所有頁面共用 */
 
 :root {
+	--gutter: 4vw;
+
 	/* 基礎 */
 	--bg: #f8f9fa;
 	--fg: #0f1419;
 	--fg-muted: #5c6b73;
-	--line: #dde3e7;
+	--line: #0000009c;
 
 	/* 霧藍 H200 */
 	--blue-50: #e4eaee;
@@ -69,4 +71,8 @@ img {
 .page-enter-from,
 .page-leave-to {
 	opacity: 0;
+}
+
+.block {
+	display: block;
 }

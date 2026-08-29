@@ -1,25 +1,38 @@
 <script setup>
 const layoutClass = 'layout'
 
-// profile 照片：捲到位才展開，只播一次
+/**
+ * 元素捲到位就把旗標翻成 true，之後不再理它（等同 reverse: false）。
+ * rootMargin 往上縮 30%，觸發線約視窗 70% 高的位置。
+ */
+function useInviewOnce(elRef) {
+	const shown = ref(false)
+	let observer
+
+	onMounted(() => {
+		observer = new IntersectionObserver(
+			([entry]) => {
+				if (!entry.isIntersecting) return
+				shown.value = true
+				observer.disconnect()
+			},
+			{ rootMargin: '0px 0px -30% 0px' },
+		)
+		observer.observe(elRef.value)
+	})
+
+	onBeforeUnmount(() => observer?.disconnect())
+
+	return shown
+}
+
+// profile 照片：捲到位才由下往上展開
 const profileImgMask = useTemplateRef('profileImgMask')
-const profileImgShown = ref(false)
-let profileImgObserver
+const profileImgShown = useInviewOnce(profileImgMask)
 
-onMounted(() => {
-	profileImgObserver = new IntersectionObserver(
-		([entry]) => {
-			if (!entry.isIntersecting) return
-			profileImgShown.value = true
-			profileImgObserver.disconnect()
-		},
-		// 往上縮 30%，觸發線約視窗 70% 高的位置
-		{ rootMargin: '0px 0px -30% 0px' },
-	)
-	profileImgObserver.observe(profileImgMask.value)
-})
-
-onBeforeUnmount(() => profileImgObserver?.disconnect())
+// profile 標題：捲到位才逐字浮上來
+const profileTitle = useTemplateRef('profileTitle')
+const profileTitleShown = useInviewOnce(profileTitle)
 </script>
 
 <template>
@@ -113,9 +126,61 @@ onBeforeUnmount(() => profileImgObserver?.disconnect())
 				</div>
 			</div>
 			<div class="profile_content">
-				<h1>
-					Hi, I Am Baird. <br />
-					A Frontend Engineer.
+				<!-- 拆成一堆 span 後讀螢幕軟體會逐字念，整段交給 aria-label -->
+				<h1
+					ref="profileTitle"
+					class="profile_title"
+					:class="{ 'is-inview': profileTitleShown }"
+					aria-label="Hi, I Am Baird. A Frontend Engineer."
+				>
+					<span class="profile_title_line" aria-hidden="true">
+						<div>
+							<span style="--i: 0">H</span>
+							<span style="--i: 1">i</span>
+							<span style="--i: 2">,</span>
+						</div>
+						<div>
+							<span style="--i: 3">I</span>
+						</div>
+						<div>
+							<span style="--i: 4">A</span>
+							<span style="--i: 5">m</span>
+						</div>
+						<div>
+							<span style="--i: 6">B</span>
+							<span style="--i: 7">a</span>
+							<span style="--i: 8">i</span>
+							<span style="--i: 9">r</span>
+							<span style="--i: 10">d</span>
+							<span style="--i: 11">.</span>
+						</div>
+					</span>
+					<span class="profile_title_line" aria-hidden="true">
+						<div>
+							<span style="--i: 0">A</span>
+						</div>
+						<div>
+							<span style="--i: 1">F</span>
+							<span style="--i: 2">r</span>
+							<span style="--i: 3">o</span>
+							<span style="--i: 4">n</span>
+							<span style="--i: 5">t</span>
+							<span style="--i: 6">e</span>
+							<span style="--i: 7">n</span>
+							<span style="--i: 8">d</span>
+						</div>
+						<div>
+							<span style="--i: 9">E</span>
+							<span style="--i: 10">n</span>
+							<span style="--i: 11">g</span>
+							<span style="--i: 12">i</span>
+							<span style="--i: 13">n</span>
+							<span style="--i: 14">e</span>
+							<span style="--i: 15">e</span>
+							<span style="--i: 16">r</span>
+							<span style="--i: 17">.</span>
+						</div>
+					</span>
 				</h1>
 				<span class="content_sm block">
 					Born in 1995, based in Taipei. I speak Mandarin, English, and Japanese
@@ -343,6 +408,12 @@ onBeforeUnmount(() => profileImgObserver?.disconnect())
 		transition: none;
 		clip-path: inset(0);
 	}
+	.profile_title_line div span {
+		translate: none;
+	}
+	.profile_title.is-inview .profile_title_line div span {
+		animation: none;
+	}
 	.hero_title_fst div span,
 	.hero_title_sec div span {
 		animation: none;
@@ -389,6 +460,36 @@ onBeforeUnmount(() => profileImgObserver?.disconnect())
 }
 
 /* 進場前整個裁掉，觸發後由下往上展開 */
+/* 標題：結構跟 hero 一樣，行 > 單字（遮罩）> 字元 */
+.profile_title_line {
+	display: block;
+}
+
+.profile_title_line div,
+.profile_title_line div span {
+	display: inline-block;
+}
+
+.profile_title_line div {
+	overflow: hidden;
+	/* 同 hero：overflow 不是 visible 時基線會跑掉，改成 top 對齊 */
+	vertical-align: top;
+}
+
+.profile_title_line div:not(:first-child) {
+	padding-left: 0.25em;
+}
+
+.profile_title_line div span {
+	translate: 0 100%;
+}
+
+/* 捲到位才開始跑，兩行的 --i 各自從 0 算，所以會同時展開 */
+.profile_title.is-inview .profile_title_line div span {
+	animation: char-rise 1s cubic-bezier(0.19, 1, 0.22, 1) both;
+	animation-delay: calc(var(--i) * 35ms);
+}
+
 .profile_img_mask {
 	clip-path: inset(100% 0 0 0);
 	transition: clip-path 1.4s cubic-bezier(0.19, 1, 0.22, 1);

@@ -24,6 +24,9 @@
 	/* 保留原本的粉，給分類標記用 */
 	--pink: #faa59e;
 
+	/* 自訂游標的顏色，hero 的裝飾線也共用這個值 */
+	--cursor-color: #7d97b8;
+
 	--font-sans:
 		'Inter Tight', 'Noto Sans JP', -apple-system, 'Hiragino Kaku Gothic ProN',
 		Meiryo, sans-serif;

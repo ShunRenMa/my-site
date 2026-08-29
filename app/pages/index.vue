@@ -9,6 +9,7 @@ const layoutClass = 'layout'
 				<span class="hero_title_fst">Made In Taiwan.</span>
 				<span class="hero_title_sec">Building For The World.</span>
 			</div>
+			<span class="hero_scrollline" aria-hidden="true"></span>
 			<div class="hero_img_wrapper">
 				<img
 					src="~/assets/images/cover1.jpg"
@@ -44,7 +45,7 @@ const layoutClass = 'layout'
 					A Frontend Engineer.
 				</h1>
 				<span class="content_sm block">
-					Born in 1995,based in Taipei. I speak Mandarin, English, and Japanese
+					Born in 1995, based in Taipei. I speak Mandarin, English, and Japanese
 					(JLPT N1).
 					<br />
 					7 years into frontend, five of them in digital advertising.
@@ -82,10 +83,12 @@ const layoutClass = 'layout'
 
 <style scoped>
 .hero_block {
+	/* hero 高度的單一來源，視差的 animation-range 也吃這個值 */
+	--hero-h: 120dvh;
 	display: block;
 	width: 100%;
-	height: 105vh;
-	height: 105dvh;
+	height: 120vh; /* 不支援 dvh 時的 fallback */
+	height: var(--hero-h);
 }
 .hero {
 	/* 讓 hero 內的 absolute 元素以它為基準，而不是整個視窗 */
@@ -95,17 +98,63 @@ const layoutClass = 'layout'
 
 .hero__img {
 	width: 100%;
-	height: 100%;
+	/* 比可視框高 25%，多出來的就是視差可以位移的餘裕 */
+	height: 125%;
 	/* 填滿容器、多的裁掉，所以任何比例的視窗都是滿版 */
 	object-fit: cover;
 	display: block;
+	animation: hero-scroll linear both;
+	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
+	animation-timeline: scroll(root block);
+	/* 對應 .hero_block 的高度：hero 完全捲出畫面時剛好跑完 */
+	animation-range: 0 var(--hero-h);
 }
+
+@keyframes hero-scroll {
+	from {
+		transform: translateY(-20%) scale(1);
+	}
+	to {
+		transform: translateY(0) scale(1.1);
+	}
+}
+
 .hero_img_wrapper {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
 	position: relative;
 	z-index: 1000;
+}
+
+.hero_scrollline {
+	position: absolute;
+	left: var(--gutter);
+	bottom: 0;
+	z-index: 1001;
+	width: 1px;
+	height: 60vh;
+	background-color: var(--cursor-color);
+	animation: scroll-line 2.4s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+}
+
+@keyframes scroll-line {
+	0% {
+		transform: scaleY(0);
+		transform-origin: 0 0;
+	}
+	50% {
+		transform: scaleY(1);
+		transform-origin: 0 0;
+	}
+	50.1% {
+		transform: scaleY(1);
+		transform-origin: 0 100%;
+	}
+	100% {
+		transform: scaleY(0);
+		transform-origin: 0 100%;
+	}
 }
 
 .hero_content {
@@ -156,6 +205,13 @@ const layoutClass = 'layout'
 
 @media (prefers-reduced-motion: reduce) {
 	.hero_profile {
+		animation: none;
+	}
+	.hero__img {
+		animation: none;
+		height: 100%;
+	}
+	.hero_scrollline {
 		animation: none;
 	}
 }

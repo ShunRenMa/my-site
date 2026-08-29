@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .cursor {
-	--cursor-color: #7d97b8;
+	/* --cursor-color 定義在 main.css 的 :root，hero 的裝飾線共用 */
 	--cursor-size: 50px;
 	--cursor-size-hover: 80px;
 	--cursor-size-link: 24px;

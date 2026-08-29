@@ -172,7 +172,7 @@ const skills = [
 .profile_img_wrapper {
 	grid-column: 1 / 3; /* 佔前兩欄，約 36.8vw */
 	position: sticky;
-	top: 4vw;
+	top: 16vh;
 	animation: img-drift linear both;
 	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
 	animation-timeline: --p; /* 用 .profile 的進出視窗進度 */
@@ -362,9 +362,13 @@ const skills = [
 	opacity: 1;
 	translate: 0 0;
 }
+/* 往下捲時微微往上浮。終點設 0 而不是負值，才不會浮過 sticky 的 top */
 @keyframes img-drift {
-	to {
+	from {
 		transform: translateY(80px);
+	}
+	to {
+		transform: translateY(0);
 	}
 }
 

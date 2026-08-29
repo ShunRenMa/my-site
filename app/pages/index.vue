@@ -1,31 +1,6 @@
 <script setup>
 const layoutClass = 'layout'
 
-/**
- * 元素捲到位就把旗標翻成 true，之後不再理它（等同 reverse: false）。
- * rootMargin 往上縮 30%，觸發線約視窗 70% 高的位置。
- */
-function useInviewOnce(elRef) {
-	const shown = ref(false)
-	let observer
-
-	onMounted(() => {
-		observer = new IntersectionObserver(
-			([entry]) => {
-				if (!entry.isIntersecting) return
-				shown.value = true
-				observer.disconnect()
-			},
-			{ rootMargin: '0px 0px -30% 0px' },
-		)
-		observer.observe(elRef.value)
-	})
-
-	onBeforeUnmount(() => observer?.disconnect())
-
-	return shown
-}
-
 // profile 照片：捲到位才由下往上展開
 const profileImgMask = useTemplateRef('profileImgMask')
 const profileImgShown = useInviewOnce(profileImgMask)

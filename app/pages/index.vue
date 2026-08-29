@@ -8,53 +8,53 @@ const layoutClass = 'layout'
 			<div class="hero_content">
 				<span class="hero_title_fst">
 					<div>
-						<span>M</span>
-						<span>a</span>
-						<span>d</span>
-						<span>e</span>
+						<span style="--i: 0">M</span>
+						<span style="--i: 1">a</span>
+						<span style="--i: 2">d</span>
+						<span style="--i: 3">e</span>
 					</div>
 					<div>
-						<span>I</span>
-						<span>n</span>
+						<span style="--i: 4">I</span>
+						<span style="--i: 5">n</span>
 					</div>
 					<div>
-						<span>T</span>
-						<span>a</span>
-						<span>i</span>
-						<span>w</span>
-						<span>a</span>
-						<span>n</span>
-						<span>.</span>
+						<span style="--i: 6">T</span>
+						<span style="--i: 7">a</span>
+						<span style="--i: 8">i</span>
+						<span style="--i: 9">w</span>
+						<span style="--i: 10">a</span>
+						<span style="--i: 11">n</span>
+						<span style="--i: 12">.</span>
 					</div>
 				</span>
 				<span class="hero_title_sec">
 					<div>
-						<span>B</span>
-						<span>u</span>
-						<span>i</span>
-						<span>l</span>
-						<span>d</span>
-						<span>i</span>
-						<span>n</span>
-						<span>g</span>
+						<span style="--i: 0">B</span>
+						<span style="--i: 1">u</span>
+						<span style="--i: 2">i</span>
+						<span style="--i: 3">l</span>
+						<span style="--i: 4">d</span>
+						<span style="--i: 5">i</span>
+						<span style="--i: 6">n</span>
+						<span style="--i: 7">g</span>
 					</div>
 					<div>
-						<span>F</span>
-						<span>o</span>
-						<span>r</span>
+						<span style="--i: 8">F</span>
+						<span style="--i: 9">o</span>
+						<span style="--i: 10">r</span>
 					</div>
 					<div>
-						<span>T</span>
-						<span>h</span>
-						<span>e</span>
+						<span style="--i: 11">T</span>
+						<span style="--i: 12">h</span>
+						<span style="--i: 13">e</span>
 					</div>
 					<div>
-						<span>W</span>
-						<span>o</span>
-						<span>r</span>
-						<span>l</span>
-						<span>d</span>
-						<span>.</span>
+						<span style="--i: 14">W</span>
+						<span style="--i: 15">o</span>
+						<span style="--i: 16">r</span>
+						<span style="--i: 17">l</span>
+						<span style="--i: 18">d</span>
+						<span style="--i: 19">.</span>
 					</div>
 				</span>
 			</div>
@@ -150,6 +150,53 @@ const layoutClass = 'layout'
 .hero_title_sec div,
 .hero_title_sec div span {
 	display: inline-block;
+}
+
+/* 每個單字是一個遮罩，字從它的下緣升上來 */
+.hero_title_fst div,
+.hero_title_sec div {
+	overflow: hidden;
+	/*
+	 * inline-block 的 overflow 一旦不是 visible，基線就從「文字基線」
+	 * 變成「盒子下緣」，行框會被撐高。改成 top 對齊就不吃基線那套。
+	 */
+	vertical-align: top;
+}
+
+.hero_title_fst div span,
+.hero_title_sec div span {
+	/*
+	 * 進場（時間驅動）用 translate，收回（捲動驅動）用 transform，
+	 * 兩個是不同的 CSS 屬性，所以兩個動畫可以同時掛在同一個元素上不打架。
+	 */
+	translate: 0 100%;
+	animation:
+		char-rise 1s cubic-bezier(0.19, 1, 0.22, 1) both,
+		char-retract linear both;
+	/* 每個字晚一點點出場，就成了由左往右的波浪 */
+	animation-delay: calc(var(--i) * 35ms), 0s;
+	animation-timeline: auto, scroll(root block);
+	animation-range: normal, 0 50vh;
+}
+
+/* 進場：從遮罩下方升上來 */
+@keyframes char-rise {
+	from {
+		translate: 0 100%;
+	}
+	to {
+		translate: 0 0;
+	}
+}
+
+/* 滑走：跟著捲動沉回遮罩下方 */
+@keyframes char-retract {
+	from {
+		transform: translateY(0);
+	}
+	to {
+		transform: translateY(100%);
+	}
 }
 
 /* 字距靠 padding 撐開，第一個字不用（不然整行會往右偏） */
@@ -266,6 +313,11 @@ const layoutClass = 'layout'
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.hero_title_fst div span,
+	.hero_title_sec div span {
+		animation: none;
+		translate: none;
+	}
 	.hero_profile {
 		animation: none;
 	}

@@ -17,9 +17,9 @@ type CursorMode = 'default' | 'fit' | 'text'
 /** 圈圈追上滑鼠的速度，越小越黏（0.15 ≈ GSAP duration:1 + power2.out） */
 const LERP = 0.1
 
-const ringEl = ref<HTMLElement>()
-const frameEl = ref<HTMLElement>()
-const dotEl = ref<HTMLElement>()
+const ringEl = useTemplateRef<HTMLElement>('ringEl')
+const frameEl = useTemplateRef<HTMLElement>('frameEl')
+const dotEl = useTemplateRef<HTMLElement>('dotEl')
 
 const visible = ref(false)
 const hovered = ref(false)

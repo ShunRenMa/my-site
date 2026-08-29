@@ -1,5 +1,25 @@
 <script setup>
 const layoutClass = 'layout'
+
+// profile 照片：捲到位才展開，只播一次
+const profileImgMask = useTemplateRef('profileImgMask')
+const profileImgShown = ref(false)
+let profileImgObserver
+
+onMounted(() => {
+	profileImgObserver = new IntersectionObserver(
+		([entry]) => {
+			if (!entry.isIntersecting) return
+			profileImgShown.value = true
+			profileImgObserver.disconnect()
+		},
+		// 往上縮 30%，觸發線約視窗 70% 高的位置
+		{ rootMargin: '0px 0px -30% 0px' },
+	)
+	profileImgObserver.observe(profileImgMask.value)
+})
+
+onBeforeUnmount(() => profileImgObserver?.disconnect())
 </script>
 
 <template>
@@ -79,7 +99,11 @@ const layoutClass = 'layout'
 
 		<div class="profile block">
 			<div class="profile_img_wrapper">
-				<div>
+				<div
+					ref="profileImgMask"
+					class="profile_img_mask"
+					:class="{ 'is-inview': profileImgShown }"
+				>
 					<img
 						src="~/assets/images/profile2.jpg"
 						alt="profile image"
@@ -176,7 +200,9 @@ const layoutClass = 'layout'
 	/* 每個字晚一點點出場，就成了由左往右的波浪 */
 	animation-delay: calc(var(--i) * 35ms), 0s;
 	animation-timeline: auto, scroll(root block);
-	animation-range: normal, 0 50vh;
+	animation-range:
+		normal,
+		0 50vh;
 }
 
 /* 進場：從遮罩下方升上來 */
@@ -313,6 +339,10 @@ const layoutClass = 'layout'
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.profile_img_mask {
+		transition: none;
+		clip-path: inset(0);
+	}
 	.hero_title_fst div span,
 	.hero_title_sec div span {
 		animation: none;
@@ -356,6 +386,16 @@ const layoutClass = 'layout'
 }
 .profile_img {
 	width: 26vw;
+}
+
+/* 進場前整個裁掉，觸發後由下往上展開 */
+.profile_img_mask {
+	clip-path: inset(100% 0 0 0);
+	transition: clip-path 1.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.profile_img_mask.is-inview {
+	clip-path: inset(0);
 }
 
 .content_sm {

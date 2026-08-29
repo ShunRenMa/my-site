@@ -40,6 +40,17 @@ const profileBioShown = useInviewOnce(profileBio)
 
 const profileMe = useTemplateRef('profileMe')
 const profileMeShown = useInviewOnce(profileMe)
+
+// About Work 結尾的技能標籤，只是列出，不能點
+const skills = [
+	'TypeScript',
+	'Vue',
+	'Nuxt',
+	'Cloud Run',
+	'Cloudflare',
+	'Leadership',
+	'＋',
+]
 </script>
 
 <template>
@@ -237,7 +248,11 @@ const profileMeShown = useInviewOnce(profileMe)
 					<span class="content_sm block">
 						BTW. I built the website from Vue + Nuxt.
 					</span>
-					<span class="content_sm block skill_block"></span>
+					<span class="content_sm block skill_block">
+						<span v-for="skill in skills" :key="skill" class="skill">
+							{{ skill }}
+						</span>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -646,6 +661,36 @@ const profileMeShown = useInviewOnce(profileMe)
 
 .work_title h2 {
 	margin: 0 0 0.5em;
+}
+
+/* 技能標籤：淺灰實心色塊 + 白字 */
+.skill_block {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6em;
+	margin-top: 1.5em;
+}
+
+.skill {
+	padding: 0.15em 0.8em;
+	border-radius: 6px;
+	background-color: #b3b3b3;
+	font-size: 0.85em;
+	letter-spacing: 0.02em;
+	line-height: 1.9;
+	color: #fff;
+	white-space: nowrap;
+	/* 整排一起浮上來，比整塊內文慢 0.35s 起跑 */
+	opacity: 0;
+	translate: 0 0.5rem;
+	transition:
+		opacity 0.6s ease-out 0.35s,
+		translate 0.6s cubic-bezier(0.19, 1, 0.22, 1) 0.35s;
+}
+
+.profile_bio.is-inview .skill {
+	opacity: 1;
+	translate: 0 0;
 }
 @keyframes img-drift {
 	to {

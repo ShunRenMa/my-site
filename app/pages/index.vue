@@ -418,43 +418,23 @@ const skills = [
 	}
 }
 
+/*
+ * 只留 scroll-driven 的動畫。animation-timeline 一旦不是 auto，
+ * main.css 那組全域的 duration 歸零就管不到，得在這裡個別關掉。
+ * 其餘時間驅動的過渡與動畫都由 main.css 統一處理。
+ */
 @media (prefers-reduced-motion: reduce) {
-	.profile_img_mask {
-		transition: none;
-		clip-path: inset(0);
-	}
-	.profile_bio,
-	.profile_me {
-		transition: none;
-		opacity: 1;
-		translate: none;
-	}
-	.smooth_line {
-		transition: none;
-		transform: none;
-	}
-	.profile_title_line div span {
-		translate: none;
-	}
-	.profile_title.is-inview .profile_title_line div span {
-		animation: none;
-	}
-	.profile_title.is-inview .profile_title_line::after {
-		animation: none;
-	}
 	.hero_title_fst div span,
 	.hero_title_sec div span {
 		animation: none;
 		translate: none;
 	}
-	.hero_profile {
-		animation: none;
-	}
 	.hero__img {
 		animation: none;
+		/* 125% 是留給視差位移的餘裕，不動了就要收回來，否則下緣會被裁掉 */
 		height: 100%;
 	}
-	.hero_scrollline {
+	.profile_img_wrapper {
 		animation: none;
 	}
 }
@@ -474,6 +454,10 @@ const skills = [
 	grid-column: 1 / 3; /* 佔前兩欄，約 36.8vw */
 	position: sticky;
 	top: 4vw;
+	animation: img-drift linear both;
+	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
+	animation-timeline: --p; /* 用 .profile 的進出視窗進度 */
+	animation-range: contain 0% contain 100%;
 }
 
 .profile_content {
@@ -619,14 +603,6 @@ const skills = [
 
 .profile {
 	view-timeline: --p block;
-}
-
-.profile_img_wrapper {
-	position: sticky;
-	top: 4vw;
-	animation: img-drift linear both;
-	animation-timeline: --p; /* 用 .profile 的進出視窗進度 */
-	animation-range: contain 0% contain 100%;
 }
 
 /* span 是 inline，裡面卻包 h2，撐不出區塊也吃不到 margin，改成 block */

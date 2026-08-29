@@ -6,8 +6,57 @@ const layoutClass = 'layout'
 	<div :class="layoutClass">
 		<section class="hero hero_block">
 			<div class="hero_content">
-				<span class="hero_title_fst">Made In Taiwan.</span>
-				<span class="hero_title_sec">Building For The World.</span>
+				<span class="hero_title_fst">
+					<div>
+						<span>M</span>
+						<span>a</span>
+						<span>d</span>
+						<span>e</span>
+					</div>
+					<div>
+						<span>I</span>
+						<span>n</span>
+					</div>
+					<div>
+						<span>T</span>
+						<span>a</span>
+						<span>i</span>
+						<span>w</span>
+						<span>a</span>
+						<span>n</span>
+						<span>.</span>
+					</div>
+				</span>
+				<span class="hero_title_sec">
+					<div>
+						<span>B</span>
+						<span>u</span>
+						<span>i</span>
+						<span>l</span>
+						<span>d</span>
+						<span>i</span>
+						<span>n</span>
+						<span>g</span>
+					</div>
+					<div>
+						<span>F</span>
+						<span>o</span>
+						<span>r</span>
+					</div>
+					<div>
+						<span>T</span>
+						<span>h</span>
+						<span>e</span>
+					</div>
+					<div>
+						<span>W</span>
+						<span>o</span>
+						<span>r</span>
+						<span>l</span>
+						<span>d</span>
+						<span>.</span>
+					</div>
+				</span>
 			</div>
 			<span class="hero_scrollline" aria-hidden="true"></span>
 			<div class="hero_img_wrapper">
@@ -94,6 +143,19 @@ const layoutClass = 'layout'
 	/* 讓 hero 內的 absolute 元素以它為基準，而不是整個視窗 */
 	position: relative;
 	overflow: hidden;
+}
+
+.hero_title_fst div,
+.hero_title_fst div span,
+.hero_title_sec div,
+.hero_title_sec div span {
+	display: inline-block;
+}
+
+/* 字距靠 padding 撐開，第一個字不用（不然整行會往右偏） */
+.hero_title_fst div:not(:first-child),
+.hero_title_sec div:not(:first-child) {
+	padding-left: 0.5em;
 }
 
 .hero__img {

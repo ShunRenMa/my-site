@@ -16,12 +16,16 @@ const profileMeShown = useInviewOnce(profileMe)
 
 // About Work 結尾的技能標籤，只是列出，不能點
 const skills = [
+	'JavaScript',
 	'TypeScript',
+	'NodeJS',
 	'Vue',
 	'Nuxt',
 	'Cloud Run',
 	'Cloudflare',
 	'Leadership',
+	'Jest',
+	'Git',
 	'＋',
 ]
 </script>
@@ -176,7 +180,8 @@ const skills = [
 	animation: img-drift linear both;
 	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
 	animation-timeline: --p; /* 用 .profile 的進出視窗進度 */
-	animation-range: contain 0% contain 100%;
+	/* cover 比 contain 長，區塊完全離開視窗才跑完，尾段才撐得住 */
+	animation-range: cover 0% cover 100%;
 }
 
 .profile_content {
@@ -363,12 +368,22 @@ const skills = [
 	translate: 0 0;
 }
 /* 往下捲時微微往上浮。終點設 0 而不是負值，才不會浮過 sticky 的 top */
+/*
+ * 先往上浮、最後再沉下去撐一段才走。
+ * 65~100% 那段是轉折，留長一點才不會像彈跳；
+ * easing 寫在 keyframe 上，上浮用 ease-out、下沉用 ease-in，接點才順。
+ */
 @keyframes img-drift {
-	from {
+	0% {
 		transform: translateY(80px);
+		animation-timing-function: cubic-bezier(0.33, 0, 0.67, 1);
 	}
-	to {
-		transform: translateY(0);
+	65% {
+		transform: translateY(-60px);
+		animation-timing-function: cubic-bezier(0.33, 0, 0.67, 1);
+	}
+	100% {
+		transform: translateY(300px);
 	}
 }
 

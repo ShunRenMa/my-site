@@ -8,14 +8,17 @@ import superlike from '~/assets/videos/superlike.mp4'
 
 const columns = [
 	{
-		duration: '50s',
+		travel: '-46%',
+		start: '0vh',
 		items: [
 			{ src: hor, offset: '4%', ratio: '384 / 864' },
 			{ src: superlike, offset: '44%', ratio: '384 / 864' },
+			{ src: gallery3d, offset: '18%', ratio: '384 / 864' },
 		],
 	},
 	{
-		duration: '65s',
+		travel: '-50%',
+		start: '-27vh',
 		items: [
 			{ src: spiderMan, offset: '22%', ratio: '384 / 864' },
 			{ src: gallery3d, offset: '58%', ratio: '384 / 864' },
@@ -23,17 +26,21 @@ const columns = [
 		],
 	},
 	{
-		duration: '45s',
+		travel: '-38%',
+		start: '-11vh',
 		items: [
 			{ src: hit, offset: '36%', ratio: '768 / 1222' },
 			{ src: hor, offset: '62%', ratio: '384 / 864' },
+			{ src: superlike, offset: '30%', ratio: '384 / 864' },
 		],
 	},
 	{
-		duration: '48s',
+		travel: '-44%',
+		start: '-38vh',
 		items: [
 			{ src: superlike, offset: '12%', ratio: '384 / 864' },
 			{ src: spiderMan, offset: '48%', ratio: '384 / 864' },
+			{ src: hitV, offset: '26%', ratio: '384 / 864' },
 		],
 	},
 ]
@@ -69,7 +76,7 @@ onBeforeUnmount(() => observer?.disconnect())
 				v-for="(column, columnIndex) in columns"
 				:key="columnIndex"
 				class="portfolio_col"
-				:style="{ '--duration': column.duration }"
+				:style="{ '--travel': column.travel, '--start': column.start }"
 			>
 				<!--
 					同一份清單印兩次，第二份是為了讓 -50% 位移接得起來。
@@ -101,6 +108,8 @@ onBeforeUnmount(() => observer?.disconnect())
 <style scoped>
 .portfolio {
 	height: 300dvh;
+	/* 這一段的進出視窗進度，就是下面每欄位移的依據 */
+	view-timeline: --portfolio block;
 }
 
 .portfolio_stage {
@@ -123,14 +132,23 @@ onBeforeUnmount(() => observer?.disconnect())
 .portfolio_track {
 	display: flex;
 	flex-direction: column;
-	animation: marquee var(--duration) linear infinite;
+	/* 每欄往上推不同距離，起跑點才不會切齊 */
+	margin-top: var(--start);
+	animation: marquee linear both;
+	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
+	animation-timeline: --portfolio;
+	/*
+	 * contain = 這一段完全蓋滿視窗的期間，剛好等於 sticky 釘住的那段。
+	 * 所以位移進度跟使用者捲動的進度是一比一對上的。
+	 */
+	animation-range: contain 0% contain 100%;
 	will-change: transform;
 }
 
 .portfolio_item {
 	margin-bottom: 12vh;
 	margin-left: var(--offset);
-	width: 35%;
+	width: 40%;
 }
 
 .portfolio_item video {
@@ -141,19 +159,20 @@ onBeforeUnmount(() => observer?.disconnect())
 }
 
 /*
- * 偶數欄反著跑（-50% → 0），看起來就是往下。
- * 清單本來就印了兩份，所以兩個方向的接點都無縫。
+ * 偶數欄反著跑：捲動進度 0 時停在 --travel，往下捲才回到 0，
+ * 視覺上就是往下移動。
  */
 .portfolio_col:nth-child(even) .portfolio_track {
 	animation-direction: reverse;
 }
 
+/* 位移量由各欄的 --travel 決定，上限 -50%（一份清單的高度）*/
 @keyframes marquee {
 	from {
 		transform: translateY(0);
 	}
 	to {
-		transform: translateY(-50%);
+		transform: translateY(var(--travel));
 	}
 }
 

@@ -100,7 +100,7 @@ onBeforeUnmount(() => observer?.disconnect())
 
 <style scoped>
 .portfolio {
-	height: 400dvh;
+	height: 300dvh;
 }
 
 .portfolio_stage {
@@ -133,16 +133,19 @@ onBeforeUnmount(() => observer?.disconnect())
 	width: 35%;
 }
 
-/*
- * aspect-ratio 是必要的：影片在 metadata 載入前沒有內在尺寸，
- * 只寫 width 的話高度會退回瀏覽器對 video 的預設值（固定 150px，跟寬度無關），
- * track 會比欄位還短，循環就露餡，載入後又會跳一次版。
- */
 .portfolio_item video {
 	display: block;
 	width: 100%;
 	aspect-ratio: var(--ratio);
 	object-fit: cover;
+}
+
+/*
+ * 偶數欄反著跑（-50% → 0），看起來就是往下。
+ * 清單本來就印了兩份，所以兩個方向的接點都無縫。
+ */
+.portfolio_col:nth-child(even) .portfolio_track {
+	animation-direction: reverse;
 }
 
 @keyframes marquee {

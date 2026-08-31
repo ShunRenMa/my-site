@@ -2,6 +2,12 @@ import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
 
 export default defineNuxtPlugin((nuxtApp) => {
+	// 關掉瀏覽器的捲動位置還原，重整一律回到頂端
+	// 注意：上一頁／下一頁也不會還原位置
+	if ('scrollRestoration' in history) {
+		history.scrollRestoration = 'manual'
+	}
+
 	if (isDesktopDevice()) {
 		const lenis = new Lenis({
 			autoRaf: true,

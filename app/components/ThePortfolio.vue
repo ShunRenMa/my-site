@@ -50,6 +50,10 @@ const columns = [
 ]
 
 const stage = useTemplateRef('stage')
+
+// 捲到位才讓影片區浮出來
+const marqueeShown = useInviewOnce(stage)
+
 let observer
 
 onMounted(() => {
@@ -74,42 +78,52 @@ onBeforeUnmount(() => observer?.disconnect())
 
 <template>
 	<section class="portfolio">
-		<!-- 外層 400vh，內層釘住 100vh，等於使用者要滑 300vh 才推得走 -->
 		<div ref="stage" class="portfolio_stage">
-			<div
-				v-for="(column, columnIndex) in columns"
-				:key="columnIndex"
-				class="portfolio_col"
-				:style="{
-					'--travel': column.travel,
-					'--start': column.start,
-					'--duration': column.duration,
-				}"
-			>
-				<!--
-					同一份清單印三份：自動循環位移 -1/3（剛好一份的高度）就能無縫接回，
-					剩下的 2/3 留給捲動位移。後兩份是純視覺的複製品，對輔助技術隱藏。
-				-->
-				<div class="portfolio_track">
-					<div
-						v-for="(item, itemIndex) in [
-							...column.items,
-							...column.items,
-							...column.items,
-						]"
-						:key="itemIndex"
-						class="portfolio_item"
-						:style="{ '--offset': item.offset, '--ratio': item.ratio }"
-						:aria-hidden="itemIndex >= column.items.length ? 'true' : undefined"
-					>
-						<video
-							:src="item.src"
-							muted
-							loop
-							playsinline
-							preload="metadata"
-							tabindex="-1"
-						></video>
+			<TheSplitTitle
+				class="portfolio_title"
+				text="Portfolio."
+				line="static"
+				size="4em"
+			/>
+
+			<div class="portfolio_marquee" :class="{ 'is-inview': marqueeShown }">
+				<div
+					v-for="(column, columnIndex) in columns"
+					:key="columnIndex"
+					class="portfolio_col"
+					:style="{
+						'--travel': column.travel,
+						'--start': column.start,
+						'--duration': column.duration,
+					}"
+				>
+					<!--
+						同一份清單印三份：自動循環位移 -1/3（剛好一份的高度）就能無縫接回，
+						剩下的 2/3 留給捲動位移。後兩份是純視覺的複製品，對輔助技術隱藏。
+					-->
+					<div class="portfolio_track">
+						<div
+							v-for="(item, itemIndex) in [
+								...column.items,
+								...column.items,
+								...column.items,
+							]"
+							:key="itemIndex"
+							class="portfolio_item"
+							:style="{ '--offset': item.offset, '--ratio': item.ratio }"
+							:aria-hidden="
+								itemIndex >= column.items.length ? 'true' : undefined
+							"
+						>
+							<video
+								:src="item.src"
+								muted
+								loop
+								playsinline
+								preload="metadata"
+								tabindex="-1"
+							></video>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -119,6 +133,12 @@ onBeforeUnmount(() => observer?.disconnect())
 
 <style scoped>
 .portfolio {
+	/*
+	 * 上面留一段空白，讓 profile 那張探出來的照片有地方落下，不會壓到標題。
+	 * 用 margin 不用 padding：padding 會被算進 view-timeline 的量測範圍，
+	 * contain 就對不上 sticky 釘住的期間，跑馬燈的進度會歪掉。
+	 */
+	margin-top: 30dvh;
 	height: 300dvh;
 	/* 這一段的進出視窗進度，就是下面每欄位移的依據 */
 	view-timeline: --portfolio block;
@@ -128,12 +148,33 @@ onBeforeUnmount(() => observer?.disconnect())
 	position: sticky;
 	top: 0;
 	display: flex;
+	flex-direction: column;
+	/* 標題在上、影片區靠下 */
+	justify-content: space-between;
+	width: 100%;
+	height: 100dvh;
+	padding: var(--gutter) var(--gutter) 0;
+}
+
+/* 影片只佔下面 80%，上面留給標題 */
+.portfolio_marquee {
+	display: flex;
 	gap: 2vw;
 	align-items: flex-start;
 	width: 100%;
-	height: 100dvh;
-	padding: 0 var(--gutter);
+	height: 80%;
+	/* 超出的部分要裁掉，循環才看不出接縫 */
 	overflow: hidden;
+	opacity: 0;
+	translate: 0 4vh;
+	transition:
+		opacity 1s ease-out,
+		translate 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.portfolio_marquee.is-inview {
+	opacity: 1;
+	translate: 0 0;
 }
 
 .portfolio_col {
@@ -218,8 +259,24 @@ onBeforeUnmount(() => observer?.disconnect())
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.portfolio_marquee {
+		transition: none;
+		opacity: 1;
+		translate: none;
+	}
+
 	.portfolio_track {
 		animation: none;
 	}
+}
+
+.portfolio_title {
+	margin: 0;
+	font-weight: bold;
+	/*
+	 * 用 text-transform 而不是直接把 text 寫成大寫，
+	 * 這樣 aria-label 還是 "Portfolio."，讀螢幕軟體不會把它逐字拼出來。
+	 */
+	text-transform: uppercase;
 }
 </style>

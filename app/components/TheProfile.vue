@@ -3,10 +3,6 @@
 const profileImgMask = useTemplateRef('profileImgMask')
 const profileImgShown = useInviewOnce(profileImgMask)
 
-// profile 標題：捲到位才逐字浮上來
-const profileTitle = useTemplateRef('profileTitle')
-const profileTitleShown = useInviewOnce(profileTitle)
-
 // profile 兩段內文：各自捲到位才向上淡入
 const profileBio = useTemplateRef('profileBio')
 const profileBioShown = useInviewOnce(profileBio)
@@ -47,62 +43,11 @@ const skills = [
 			</div>
 		</div>
 		<div class="profile_content">
-			<!-- aria-label 給讀螢幕軟體-->
-			<h1
-				ref="profileTitle"
+			<TheSplitTitle
+				tag="h1"
 				class="profile_title"
-				:class="{ 'is-inview': profileTitleShown }"
-				aria-label="Hi, I Am Baird. A Frontend Engineer."
-			>
-				<span class="profile_title_line" aria-hidden="true">
-					<div>
-						<span style="--i: 0">H</span>
-						<span style="--i: 1">i</span>
-						<span style="--i: 2">,</span>
-					</div>
-					<div>
-						<span style="--i: 3">I</span>
-					</div>
-					<div>
-						<span style="--i: 4">A</span>
-						<span style="--i: 5">m</span>
-					</div>
-					<div>
-						<span style="--i: 6">B</span>
-						<span style="--i: 7">a</span>
-						<span style="--i: 8">i</span>
-						<span style="--i: 9">r</span>
-						<span style="--i: 10">d</span>
-						<span style="--i: 11">.</span>
-					</div>
-				</span>
-				<span class="profile_title_line" aria-hidden="true">
-					<div>
-						<span style="--i: 0">A</span>
-					</div>
-					<div>
-						<span style="--i: 1">F</span>
-						<span style="--i: 2">r</span>
-						<span style="--i: 3">o</span>
-						<span style="--i: 4">n</span>
-						<span style="--i: 5">t</span>
-						<span style="--i: 6">e</span>
-						<span style="--i: 7">n</span>
-						<span style="--i: 8">d</span>
-					</div>
-					<div>
-						<span style="--i: 9">E</span>
-						<span style="--i: 10">n</span>
-						<span style="--i: 11">g</span>
-						<span style="--i: 12">i</span>
-						<span style="--i: 13">n</span>
-						<span style="--i: 14">e</span>
-						<span style="--i: 15">e</span>
-						<span style="--i: 16">r</span>
-						<span style="--i: 17">.</span>
-					</div>
-				</span>
-			</h1>
+				:text="'Hi, I Am Baird.\nA Frontend Engineer.'"
+			/>
 
 			<div
 				ref="profileMe"
@@ -213,84 +158,6 @@ const skills = [
 }
 
 /* 進場前整個裁掉，觸發後由下往上展開 */
-/* 標題：結構跟 hero 一樣，行 > 單字（遮罩）> 字元 */
-.profile_title_line {
-	display: block;
-	/* 縮到文字寬，底線才不會拉到整個欄位那麼長 */
-	width: fit-content;
-	position: relative;
-}
-
-/*
- * 底線：整段動畫分三拍
- *   0 ~ 19%   由左往右長出來（0.5s）
- *   19 ~ 81%  停著，這段時間讓文字浮上來
- *   81 ~ 100% 往右收掉（0.5s）
- */
-.profile_title_line::after {
-	content: '';
-	position: absolute;
-	left: 0;
-	bottom: 0.35em;
-	width: 100%;
-	height: 2px;
-	background-color: var(--cursor-color);
-	transform: scaleX(0);
-	transform-origin: left center;
-}
-
-.profile_title.is-inview .profile_title_line::after {
-	animation: line-sweep 2.6s linear both;
-}
-
-@keyframes line-sweep {
-	0% {
-		transform: scaleX(0);
-		transform-origin: left center;
-		animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
-	}
-	19% {
-		transform: scaleX(1);
-		transform-origin: left center;
-	}
-	/* 這段 scaleX 都是 1，origin 怎麼插值畫面都一樣，剛好拿來偷換邊 */
-	81% {
-		transform: scaleX(1);
-		transform-origin: right center;
-		animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-	}
-	100% {
-		transform: scaleX(0);
-		transform-origin: right center;
-	}
-}
-
-.profile_title_line div,
-.profile_title_line div span {
-	display: inline-block;
-}
-
-.profile_title_line div {
-	overflow: hidden;
-	/* 同 hero：overflow 不是 visible 時基線會跑掉，改成 top 對齊 */
-	vertical-align: top;
-}
-
-.profile_title_line div:not(:first-child) {
-	padding-left: 0.25em;
-}
-
-.profile_title_line div span {
-	translate: 0 100%;
-}
-
-/* 捲到位才開始跑，兩行的 --i 各自從 0 算，所以會同時展開 */
-.profile_title.is-inview .profile_title_line div span {
-	animation: char-rise 1s cubic-bezier(0.19, 1, 0.22, 1) both;
-	/* 0.5s = 底線畫完的時間，等它到位字才開始浮 */
-	animation-delay: calc(0.5s + var(--i) * 35ms);
-}
-
 .profile_img_mask {
 	/* 放大時的溢出裁在這裡，跟進場遮罩共用同一個框 */
 	overflow: hidden;
@@ -402,17 +269,7 @@ const skills = [
 		animation-timing-function: cubic-bezier(0.33, 0, 0.67, 1);
 	}
 	100% {
-		transform: translateY(300px);
-	}
-}
-
-/* 標題逐字浮上來，跟 hero 同一套動作（scoped 會各自加後綴，不會互相干擾） */
-@keyframes char-rise {
-	from {
-		translate: 0 100%;
-	}
-	to {
-		translate: 0 0;
+		transform: translateY(200px);
 	}
 }
 

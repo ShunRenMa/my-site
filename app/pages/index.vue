@@ -79,7 +79,7 @@ const layoutClass = 'layout'
 
 		<TheProfile />
 
-		<div class="photography"></div>
+		<ThePortfolio />
 	</div>
 </template>
 
@@ -283,12 +283,5 @@ const layoutClass = 'layout'
 		/* 125% 是留給視差位移的餘裕，不動了就要收回來，否則下緣會被裁掉 */
 		height: 100%;
 	}
-}
-
-.photography {
-	width: 100%;
-	height: 150dvh;
-	height: 150vh;
-	background: gray;
 }
 </style>

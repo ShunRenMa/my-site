@@ -186,13 +186,30 @@ const skills = [
 
 .profile_content {
 	grid-column: 3 / -1; /* 從 GITHUB 那欄起算 */
-	min-height: 150vh;
+	min-height: 180vh;
 }
 .profile_content h1 {
 	font-size: 3em;
 }
 .profile_img {
 	width: 26vw;
+	/* 去掉 inline 基線留下的縫，放大時邊緣才貼齊遮罩 */
+	display: block;
+	/* 跟 hero 同一套：往下捲時微微放大。scale 不影響版面寬度，
+	 * 溢出的部分由 .profile_img_mask 裁掉，所以欄寬不會被撐開 */
+	animation: img-zoom linear both;
+	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
+	animation-timeline: --p; /* 跟 wrapper 的漂移同一個時間軸 */
+	animation-range: cover 0% cover 100%;
+}
+
+@keyframes img-zoom {
+	from {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(1.1);
+	}
 }
 
 /* 進場前整個裁掉，觸發後由下往上展開 */
@@ -275,6 +292,8 @@ const skills = [
 }
 
 .profile_img_mask {
+	/* 放大時的溢出裁在這裡，跟進場遮罩共用同一個框 */
+	overflow: hidden;
 	clip-path: inset(100% 0 0 0);
 	transition: clip-path 1.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -402,7 +421,8 @@ const skills = [
  * main.css 那組全域的 duration 歸零就管不到，得在這裡個別關掉。
  */
 @media (prefers-reduced-motion: reduce) {
-	.profile_img_wrapper {
+	.profile_img_wrapper,
+	.profile_img {
 		animation: none;
 	}
 }

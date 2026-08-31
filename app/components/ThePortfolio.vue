@@ -153,7 +153,7 @@ onBeforeUnmount(() => observer?.disconnect())
 	justify-content: space-between;
 	width: 100%;
 	height: 100dvh;
-	padding: var(--gutter) var(--gutter) 0;
+	padding: 0 var(--gutter);
 }
 
 /* 影片只佔下面 80%，上面留給標題 */

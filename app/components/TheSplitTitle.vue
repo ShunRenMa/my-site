@@ -72,10 +72,11 @@ const shown = useInviewOnce(root)
 }
 
 /*
- * 底線：整段動畫分三拍
- *   0 ~ 19%   由左往右長出來（0.5s）
- *   19 ~ 81%  停著，這段時間讓文字浮上來
- *   81 ~ 100% 往右收掉（0.5s）
+ * 底線：整段動畫分三拍（共 2s）
+ *   0 ~ 25%   由左往右長出來（0.5s，跟字元的 animation-delay 對齊）
+ *   25 ~ 75%  停著（1s），讓文字浮上來
+ *   75 ~ 100% 往右收掉（0.5s）
+ * 停頓比最後一個字浮完的時間短，線會在文字還在收尾時就開始撤，不留空檔。
  */
 .splitTitle_line::after {
 	content: '';
@@ -90,7 +91,7 @@ const shown = useInviewOnce(root)
 }
 
 .splitTitle.is-line-sweep.is-inview .splitTitle_line::after {
-	animation: line-sweep 2.6s linear both;
+	animation: line-sweep 2s linear both;
 }
 
 /* static：滿框、畫出來就留著，只有出現的那一下有動 */
@@ -113,12 +114,12 @@ const shown = useInviewOnce(root)
 		transform-origin: left center;
 		animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
 	}
-	19% {
+	25% {
 		transform: scaleX(1);
 		transform-origin: left center;
 	}
 	/* 這段 scaleX 都是 1，origin 怎麼插值畫面都一樣，剛好拿來偷換邊 */
-	81% {
+	75% {
 		transform: scaleX(1);
 		transform-origin: right center;
 		animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);

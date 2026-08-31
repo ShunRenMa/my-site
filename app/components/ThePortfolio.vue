@@ -8,7 +8,8 @@ import superlike from '~/assets/videos/superlike.mp4'
 
 const columns = [
 	{
-		travel: '-46%',
+		travel: '-30%',
+		duration: '38s',
 		start: '0vh',
 		items: [
 			{ src: hor, offset: '4%', ratio: '384 / 864' },
@@ -17,7 +18,8 @@ const columns = [
 		],
 	},
 	{
-		travel: '-50%',
+		travel: '-34%',
+		duration: '52s',
 		start: '-27vh',
 		items: [
 			{ src: spiderMan, offset: '22%', ratio: '384 / 864' },
@@ -26,7 +28,8 @@ const columns = [
 		],
 	},
 	{
-		travel: '-38%',
+		travel: '-26%',
+		duration: '44s',
 		start: '-11vh',
 		items: [
 			{ src: hit, offset: '36%', ratio: '768 / 1222' },
@@ -35,7 +38,8 @@ const columns = [
 		],
 	},
 	{
-		travel: '-44%',
+		travel: '-30%',
+		duration: '46s',
 		start: '-38vh',
 		items: [
 			{ src: superlike, offset: '12%', ratio: '384 / 864' },
@@ -76,15 +80,23 @@ onBeforeUnmount(() => observer?.disconnect())
 				v-for="(column, columnIndex) in columns"
 				:key="columnIndex"
 				class="portfolio_col"
-				:style="{ '--travel': column.travel, '--start': column.start }"
+				:style="{
+					'--travel': column.travel,
+					'--start': column.start,
+					'--duration': column.duration,
+				}"
 			>
 				<!--
-					同一份清單印兩次，第二份是為了讓 -50% 位移接得起來。
-					它是純視覺的複製品，對輔助技術隱藏。
+					同一份清單印三份：自動循環位移 -1/3（剛好一份的高度）就能無縫接回，
+					剩下的 2/3 留給捲動位移。後兩份是純視覺的複製品，對輔助技術隱藏。
 				-->
 				<div class="portfolio_track">
 					<div
-						v-for="(item, itemIndex) in [...column.items, ...column.items]"
+						v-for="(item, itemIndex) in [
+							...column.items,
+							...column.items,
+							...column.items,
+						]"
 						:key="itemIndex"
 						class="portfolio_item"
 						:style="{ '--offset': item.offset, '--ratio': item.ratio }"
@@ -134,15 +146,24 @@ onBeforeUnmount(() => observer?.disconnect())
 	flex-direction: column;
 	/* 每欄往上推不同距離，起跑點才不會切齊 */
 	margin-top: var(--start);
-	animation: marquee linear both;
+	/*
+	 * 兩個動畫同時跑：一個看時間、一個看捲動。
+	 * 一個 animation 只能綁一條 timeline，所以必須拆成兩條，
+	 * 而且各動各的屬性（translate / transform）才不會互相覆蓋。
+	 */
+	animation:
+		marquee-auto var(--duration) linear infinite,
+		marquee-scroll linear both;
 	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
-	animation-timeline: --portfolio;
+	animation-timeline: auto, --portfolio;
 	/*
 	 * contain = 這一段完全蓋滿視窗的期間，剛好等於 sticky 釘住的那段。
-	 * 所以位移進度跟使用者捲動的進度是一比一對上的。
+	 * 所以捲動位移的進度跟使用者捲動的進度是一比一對上的。
 	 */
-	animation-range: contain 0% contain 100%;
-	will-change: transform;
+	animation-range:
+		normal,
+		contain 0% contain 100%;
+	will-change: translate, transform;
 }
 
 .portfolio_item {
@@ -159,15 +180,25 @@ onBeforeUnmount(() => observer?.disconnect())
 }
 
 /*
- * 偶數欄反著跑：捲動進度 0 時停在 --travel，往下捲才回到 0，
- * 視覺上就是往下移動。
+ * 偶數欄反著跑：寫一個值會同時套用到兩個動畫，
+ * 所以自動循環和捲動位移會一起顛倒，整欄一致往下。
  */
 .portfolio_col:nth-child(even) .portfolio_track {
 	animation-direction: reverse;
 }
 
-/* 位移量由各欄的 --travel 決定，上限 -50%（一份清單的高度）*/
-@keyframes marquee {
+/* 自動循環：位移剛好一份清單的高度（三份中的 1/3），接回起點時看不出來 */
+@keyframes marquee-auto {
+	from {
+		translate: 0 0;
+	}
+	to {
+		translate: 0 -33.3333%;
+	}
+}
+
+/* 捲動位移：量由各欄的 --travel 決定，跟上面那條相加 */
+@keyframes marquee-scroll {
 	from {
 		transform: translateY(0);
 	}

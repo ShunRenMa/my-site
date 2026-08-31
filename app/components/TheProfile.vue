@@ -22,6 +22,7 @@ const skills = [
 	'Leadership',
 	'Jest',
 	'Git',
+	'UI/UX...?',
 	'＋',
 ]
 </script>
@@ -83,18 +84,19 @@ const skills = [
 					up make a tool for it.
 				</span>
 				<span class="content_sm block">
-					A reliable partner in bringing ideas to life.
-				</span>
-				<span class="content_sm block">
 					As a Senior Frontend Engineer and Development Manager（a five-person
 					team）, I also care about teams work together.
 					<br />
-					putting the right people on the right problems. I believe Good
+					putting the right people on the right problems. I believe good
 					products come from people who are set up to do their best work.
 					<br />
 				</span>
 				<span class="content_sm block">
-					BTW. I built the website from Vue + Nuxt.
+					<br />
+					Lately I've been studying UI/UX.
+				</span>
+				<span class="content_sm block">
+					BTW, I built the website from Vue + Nuxt.
 				</span>
 				<span class="content_sm block skill_block">
 					<span v-for="skill in skills" :key="skill" class="skill">

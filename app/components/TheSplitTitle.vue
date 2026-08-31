@@ -9,11 +9,10 @@ const props = defineProps({
 	tag: { type: String, default: 'h2' },
 	/**
 	 * 底線的樣式：
-	 *   sweep  由左往右畫出來、停一下、再往右收掉，寬度貼齊文字
-	 *   static 一條滿框的線，畫出來之後就一直留著
+	 *   sweep  從左進場右出場
+	 *   static 進場後維持
 	 */
 	line: { type: String, default: 'sweep' },
-	// 字級。底線的粗細和位置都用 em，所以會跟著一起縮放
 	size: { type: String, default: null },
 })
 

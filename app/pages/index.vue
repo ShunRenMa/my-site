@@ -78,8 +78,8 @@ const layoutClass = 'layout'
 		</section>
 
 		<TheProfile />
-
 		<ThePortfolio />
+		<ThePhotography />
 	</div>
 </template>
 

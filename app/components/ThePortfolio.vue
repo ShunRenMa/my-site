@@ -84,7 +84,25 @@ onBeforeUnmount(() => observer?.disconnect())
 				text="Portfolio."
 				line="static"
 				size="4em"
-			/>
+			>
+				<template #tail>
+					<NuxtLink to="/work" class="portfolio_more">
+						View More
+						<svg
+							class="portfolio_more_arrow"
+							viewBox="0 0 14 14"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.6"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<path d="M4 7h8M9 4l3 3-3 3" />
+						</svg>
+					</NuxtLink>
+				</template>
+			</TheSplitTitle>
 
 			<div class="portfolio_marquee" :class="{ 'is-inview': marqueeShown }">
 				<div
@@ -268,6 +286,70 @@ onBeforeUnmount(() => observer?.disconnect())
 	.portfolio_track {
 		animation: none;
 	}
+}
+
+.portfolio_more {
+	/*
+	 * --more-h 是這顆按鈕唯一的尺寸旋鈕，寬、字級、箭頭、圓角
+	 * 全部按固定比例從它推導。要放大縮小只動這一個值，
+	 * 想跟著視窗縮就改成 clamp(2rem, 3.2vw, 3rem) 之類的。
+	 */
+	--more-h: 2.5rem;
+
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: calc(var(--more-h) * 0.18);
+	width: calc(var(--more-h) * 3.6);
+	height: var(--more-h);
+	border: 1px solid var(--fg);
+	border-radius: calc(var(--more-h) * 0.05);
+	font-size: calc(var(--more-h) * 0.26);
+	line-height: 1;
+	letter-spacing: 0.14em;
+	/* 填色蓋過來的時候字要跟著翻白 */
+	transition: color 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+	/* 自成一個堆疊脈絡，下面的 z-index: -1 才只會沉到這顆按鈕的背景後面 */
+	isolation: isolate;
+}
+
+/* 箭頭一樣掛在 --more-h 上，跟著框走不跟著字走 */
+.portfolio_more_arrow {
+	width: calc(var(--more-h) * 0.32);
+	height: calc(var(--more-h) * 0.32);
+	flex-shrink: 0;
+	transition: translate 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.portfolio_more:hover .portfolio_more_arrow {
+	translate: calc(var(--more-h) * 0.08) 0;
+}
+
+/*
+ * 填色層。平常 origin 在右邊、hover 才換到左邊：
+ * 進來時由左往右灌滿，離開時繼續往右邊排掉，來回都是同一個方向。
+ */
+.portfolio_more::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	/* 跟著按鈕的圓角，不然填色的方角會從膠囊邊緣露出來 */
+	border-radius: inherit;
+	background: var(--fg);
+	transform: scaleX(0);
+	transform-origin: right center;
+	transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.portfolio_more:hover {
+	color: var(--bg);
+}
+
+.portfolio_more:hover::before {
+	transform: scaleX(1);
+	transform-origin: left center;
 }
 
 .portfolio_title {

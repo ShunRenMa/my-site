@@ -58,10 +58,50 @@ const shown = useInviewOnce(root)
 				>
 			</div>
 		</span>
+
+		<!--
+			線尾的插槽。內容由呼叫端決定，元件只負責把它擺到線的右端。
+			位置吃 ::after 的座標，所以只有 line="static"（線滿版）對得齊。
+		-->
+		<span v-if="$slots.tail" class="splitTitle_tail">
+			<span class="splitTitle_tailInner"><slot name="tail" /></span>
+		</span>
 	</component>
 </template>
 
 <style scoped>
+/* 線尾插槽以它為定位基準 */
+.splitTitle {
+	position: relative;
+}
+
+/*
+ * 遮罩層。bottom 是線的 bottom 加上線的厚度，按鈕就剛好站在線上。
+ * 這裡不重設字級，em 才會跟著標題走，換 size 也不用改這個數字。
+ */
+.splitTitle_tail {
+	position: absolute;
+	right: 0;
+	bottom: calc(0.35em + 0.045em);
+	overflow: hidden;
+	/* 遮罩貼齊內容，不留行高的空隙 */
+	line-height: 0;
+}
+
+/* 位移層。字級在這裡才脫離標題的 4em */
+.splitTitle_tailInner {
+	display: inline-block;
+	font-size: 1rem;
+	line-height: normal;
+	translate: 0 100%;
+	/* 1.2s = 上面那條線畫完的時間，等它到位按鈕才浮上來 */
+	transition: translate 0.8s cubic-bezier(0.19, 1, 0.22, 1) 1.2s;
+}
+
+.splitTitle.is-inview .splitTitle_tailInner {
+	translate: 0 0;
+}
+
 /* 結構跟 hero 一樣，行 > 單字（遮罩）> 字元 */
 .splitTitle_line {
 	display: block;
@@ -175,6 +215,9 @@ const shown = useInviewOnce(root)
 	.splitTitle.is-line-static .splitTitle_line::after {
 		transition: none;
 		transform: scaleX(1);
+	}
+	.splitTitle_tailInner {
+		translate: none;
 	}
 }
 </style>

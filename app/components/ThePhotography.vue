@@ -1,5 +1,12 @@
 <script setup></script>
 
 <template>
-	<div></div>
+	<div class="photography"></div>
 </template>
+
+<style scoped>
+.photography {
+	width: 100%;
+	height: 150dvh;
+}
+</style>

@@ -79,6 +79,17 @@ const layoutClass = 'layout'
 
 		<TheProfile />
 		<ThePortfolio />
+
+		<div class="personal_tagLine">
+			<span class="pipe">|</span>
+			<span class="word">PERSONAL</span>
+			<span class="pipe">|</span>
+			<span class="word">PERSONAL</span>
+			<span class="pipe">|</span>
+			<span class="word">PERSONAL</span>
+			<span class="pipe">|</span>
+			<span class="word">PERSONAL</span>
+		</div>
 		<ThePhotography />
 	</div>
 </template>
@@ -110,8 +121,7 @@ const layoutClass = 'layout'
 .hero_title_sec div {
 	overflow: hidden;
 	/*
-	 * inline-block 的 overflow 一旦不是 visible，基線就從「文字基線」
-	 * 變成「盒子下緣」，行框會被撐高。改成 top 對齊就不吃基線那套。
+	 * inline-block 的 overflow 一旦不是 visible，行框會被撐高。改成 top 對齊就不會。
 	 */
 	vertical-align: top;
 }
@@ -283,5 +293,10 @@ const layoutClass = 'layout'
 		/* 125% 是留給視差位移的餘裕，不動了就要收回來，否則下緣會被裁掉 */
 		height: 100%;
 	}
+}
+
+.personal_tagLine {
+	width: 100%;
+	height: 100dvh;
 }
 </style>

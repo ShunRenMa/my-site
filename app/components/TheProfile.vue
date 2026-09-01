@@ -12,11 +12,13 @@ const profileMeShown = useInviewOnce(profileMe)
 
 // About Work 結尾的技能標籤，只是列出，不能點
 const skills = [
+	'HTML',
+	'CSS',
 	'JavaScript',
 	'TypeScript',
-	'NodeJS',
-	'Vue',
-	'Nuxt',
+	'Node.js',
+	'Vue.js',
+	'Nuxt.js',
 	'Cloud Run',
 	'Cloudflare',
 	'Leadership',

@@ -299,28 +299,22 @@ const layoutClass = 'layout'
 	}
 	.hero__img {
 		animation: none;
-		/* 125% 是留給視差位移的餘裕，不動了就要收回來，否則下緣會被裁掉 */
 		height: 100%;
 	}
 }
 
 /*
- * 自動跑馬燈：跟捲動無關，所以刻意不掛 animation-timeline，純時間驅動。
- * 速度只由 --duration 決定，不要靠加減字數來調。
+ * 自動跑馬燈： 速度只由 --duration 決定。
  */
 .personal_tagLine {
 	--duration: 80s;
 	/* 字之間的間距，同時也是接縫處的間距（見 .personal_group 的 padding-right） */
 	--word-gap: 0.4em;
-
-	/* 跑道要靠 top 定位，這裡當它的基準 */
 	position: relative;
 	width: 100%;
 	height: 100dvh;
-	/* 超出的部分要裁掉，循環才看不出接縫 */
 	overflow: hidden;
 	font-size: clamp(2.5rem, 7vw, 8rem);
-	/* 全域的 line-height: 2 會把這麼大的字撐出一堆空白，這裡收掉 */
 	line-height: 1;
 	user-select: none;
 }

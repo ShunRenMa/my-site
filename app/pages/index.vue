@@ -81,14 +81,23 @@ const layoutClass = 'layout'
 		<ThePortfolio />
 
 		<div class="personal_tagLine">
-			<span class="pipe">|</span>
-			<span class="word">PERSONAL</span>
-			<span class="pipe">|</span>
-			<span class="word">PERSONAL</span>
-			<span class="pipe">|</span>
-			<span class="word">PERSONAL</span>
-			<span class="pipe">|</span>
-			<span class="word">PERSONAL</span>
+			<!--
+				同一份字串印兩份：自動循環位移 -50%（剛好一份的寬度）就能無縫接回。
+				第二份是純視覺的複製品，對輔助技術隱藏。
+			-->
+			<div class="personal_track">
+				<div
+					v-for="copy in 2"
+					:key="copy"
+					class="personal_group"
+					:aria-hidden="copy > 1 ? 'true' : undefined"
+				>
+					<template v-for="i in 6" :key="i">
+						<span class="pipe">|</span>
+						<span class="word">PERSONAL</span>
+					</template>
+				</div>
+			</div>
 		</div>
 		<ThePhotography />
 	</div>
@@ -295,8 +304,76 @@ const layoutClass = 'layout'
 	}
 }
 
+/*
+ * 自動跑馬燈：跟捲動無關，所以刻意不掛 animation-timeline，純時間驅動。
+ * 速度只由 --duration 決定，不要靠加減字數來調。
+ */
 .personal_tagLine {
+	--duration: 80s;
+	/* 字之間的間距，同時也是接縫處的間距（見 .personal_group 的 padding-right） */
+	--word-gap: 0.4em;
+
+	/* 跑道要靠 top 定位，這裡當它的基準 */
+	position: relative;
 	width: 100%;
 	height: 100dvh;
+	/* 超出的部分要裁掉，循環才看不出接縫 */
+	overflow: hidden;
+	font-size: clamp(2.5rem, 7vw, 8rem);
+	/* 全域的 line-height: 2 會把這麼大的字撐出一堆空白，這裡收掉 */
+	line-height: 1;
+	user-select: none;
+}
+
+.personal_track {
+	position: absolute;
+	left: 0;
+	top: 80%;
+	display: flex;
+	width: max-content;
+	/*
+	 * 把自己拉高半個身高，讓 80% 對到的是這一行的中線而不是上緣。
+	 * 動畫吃的是 translate，這裡用 transform，兩個是不同的 CSS 屬性，
+	 * 所以定位和循環位移可以同時掛在同一個元素上不打架。
+	 */
+	transform: translateY(-50%);
+	animation: personal-run var(--duration) linear infinite;
+	will-change: translate;
+}
+
+/*
+ * 一份 = 四組「| PERSONAL」。右邊補上跟內部相同的間距，
+ * 接回起點時第一根 pipe 才不會貼上前一份的最後一個字。
+ */
+.personal_group {
+	display: flex;
+	align-items: center;
+	gap: var(--word-gap);
+	padding-right: var(--word-gap);
+	white-space: nowrap;
+}
+
+.personal_group .pipe {
+	font-weight: 300;
+	color: var(--fg-muted);
+}
+
+.personal_group .word {
+	font-weight: 700;
+	letter-spacing: 0.04em;
+}
+
+/*
+ * 位移剛好一份的寬度（兩份中的 1/2），接回起點時看不出來。
+ * prefers-reduced-motion 不用另外寫：main.css 的全域規則會讓它一格跳到 -50%，
+ * 而 -50% 跟 0% 的畫面長得一樣，等同於直接停住。
+ */
+@keyframes personal-run {
+	from {
+		translate: 0 0;
+	}
+	to {
+		translate: -50% 0;
+	}
 }
 </style>

@@ -312,7 +312,7 @@ const layoutClass = 'layout'
 	--word-gap: 0.4em;
 	position: relative;
 	width: 100%;
-	height: 100dvh;
+	height: 120dvh;
 	overflow: hidden;
 	font-size: clamp(2.5rem, 7vw, 8rem);
 	line-height: 1;
@@ -322,7 +322,7 @@ const layoutClass = 'layout'
 .personal_track {
 	position: absolute;
 	left: 0;
-	top: 80%;
+	top: 80vh;
 	display: flex;
 	width: max-content;
 	/*

@@ -1,11 +1,15 @@
 <script setup>
+import p2 from '~/assets/images/p2.jpg'
 import p3 from '~/assets/images/p3.jpg'
 import p4 from '~/assets/images/p4.jpg'
+import p5 from '~/assets/images/p5.jpg'
 
 // 之後往下加物件就好，高度和動畫區間會自己算
 const photos = [
 	{ src: p4, tagline: 'LIGHT THAT ONLY LASTS A MOMENT.', date: '2025.03' },
 	{ src: p3, tagline: 'THE CITY KEEPS ITS OWN RHYTHM.', date: '2025.05' },
+	{ src: p5, tagline: 'LIGHT THAT ONLY LASTS A MOMENT.', date: '2025.03' },
+	{ src: p2, tagline: 'THE CITY KEEPS ITS OWN RHYTHM.', date: '2025.05' },
 ]
 
 const infos = useTemplateRef('infos')

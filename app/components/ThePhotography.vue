@@ -100,7 +100,7 @@ onBeforeUnmount(() => observer?.disconnect())
 	/* 卡片開始到結束 */
 	--step: calc(var(--rise) + var(--hold));
 	/* 第一 cut 字停留的距離 */
-	--lead: 50dvh;
+	--lead: 40dvh;
 
 	width: 100%;
 	/* 舞台自己一個視窗高，其餘都是釘住期間要走的距離 */
@@ -141,14 +141,13 @@ onBeforeUnmount(() => observer?.disconnect())
 	font-size: clamp(1.125rem, 1.9vw, 2.125rem);
 	font-weight: 400;
 	letter-spacing: 0.2em;
-	text-indent: 0.2em;
 	opacity: 0.7;
 }
 
 /* 跟 hero 同一條：先由上往下畫滿，再由上往下收掉 */
 .photo_scrollline {
 	width: 1px;
-	height: 40vh;
+	height: 50vh;
 	margin-top: 2rem;
 	background-color: var(--cursor-color);
 	animation: scroll-line 2.4s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;

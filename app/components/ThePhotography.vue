@@ -13,6 +13,7 @@ const photos = [
 ]
 
 const title = 'PHOTOGRAPHY'
+const subtitle = 'world as I see it'
 
 const infos = useTemplateRef('infos')
 const heading = useTemplateRef('heading')
@@ -61,6 +62,12 @@ onBeforeUnmount(() => observer?.disconnect())
 						<span>{{ char }}</span>
 					</span>
 				</span>
+				<span class="photo_tagline_sub" :class="{ 'is-inview': titleShown }">
+					<span class="char" :style="{ '--i': title.length }">
+						<span>{{ subtitle }}</span>
+					</span>
+				</span>
+				<span class="photo_scrollline" aria-hidden="true"></span>
 			</div>
 			<article
 				v-for="(photo, i) in photos"
@@ -116,13 +123,54 @@ onBeforeUnmount(() => observer?.disconnect())
 	position: absolute;
 	inset: 0;
 	z-index: 0;
-	display: grid;
-	place-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	/* 線佔了下半部，整組往下推才會回到視覺中間 */
+	padding-top: 20dvh;
+	gap: 0.35em;
 	font-size: clamp(2.5rem, 7vw, 8rem);
 	font-weight: 700;
 	letter-spacing: 0.04em;
 	line-height: 1;
 	user-select: none;
+}
+
+.photo_tagline_sub {
+	font-size: clamp(1.125rem, 1.9vw, 2.125rem);
+	font-weight: 400;
+	letter-spacing: 0.2em;
+	text-indent: 0.2em;
+	opacity: 0.7;
+}
+
+/* 跟 hero 同一條：先由上往下畫滿，再由上往下收掉 */
+.photo_scrollline {
+	width: 1px;
+	height: 40vh;
+	margin-top: 2rem;
+	background-color: var(--cursor-color);
+	animation: scroll-line 2.4s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+}
+
+@keyframes scroll-line {
+	0% {
+		transform: scaleY(0);
+		transform-origin: 50% 0;
+	}
+	50% {
+		transform: scaleY(1);
+		transform-origin: 50% 0;
+	}
+	50.1% {
+		transform: scaleY(1);
+		transform-origin: 50% 100%;
+	}
+	100% {
+		transform: scaleY(0);
+		transform-origin: 50% 100%;
+	}
 }
 
 /* 每個字一個遮罩，字從它的下緣升上來 */

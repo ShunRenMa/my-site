@@ -2,11 +2,14 @@
 defineProps({
 	text: { type: String, required: true },
 	repeat: { type: Number, default: 6 },
+	height: { type: String, default: '120dvh' },
+	// 文字那行的中線落在區塊頂端往下多少，給 % 就會跟著 height 縮放
+	top: { type: String, default: '80vh' },
 })
 </script>
 
 <template>
-	<div class="tagLine">
+	<div class="tagLine" :style="{ '--height': height, '--top': top }">
 		<!--
 			同一份字串印兩份：自動循環位移 -50%（剛好一份的寬度）就能無縫接回。
 			第二份是純視覺的複製品，對輔助技術隱藏。
@@ -35,7 +38,7 @@ defineProps({
 	--word-gap: 0.4em;
 	position: relative;
 	width: 100%;
-	height: 120dvh;
+	height: var(--height);
 	overflow: hidden;
 	font-size: clamp(2.5rem, 7vw, 8rem);
 	line-height: 1;
@@ -45,7 +48,7 @@ defineProps({
 .tagLine_track {
 	position: absolute;
 	left: 0;
-	top: 80vh;
+	top: var(--top);
 	display: flex;
 	width: max-content;
 	/*

@@ -80,10 +80,10 @@ const layoutClass = 'layout'
 		<TheProfile />
 		<ThePortfolio />
 
-		<TheTagLine text="PERSONAL" />
+		<TheTagLine text="PERSONAL" height="150dvh" />
 		<ThePhotography />
 
-		<TheTagLine text="THANK YOU FOR READING" />
+		<TheTagLine text="THANK YOU FOR READING" height="100dvh" />
 	</div>
 </template>
 

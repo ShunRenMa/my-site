@@ -4,12 +4,36 @@ import p3 from '~/assets/images/p3.jpg'
 import p4 from '~/assets/images/p4.jpg'
 import p5 from '~/assets/images/p5.jpg'
 
-// 之後往下加物件就好，高度和動畫區間會自己算
+// taglinePos / datePos：tl 左上、tr 右上、bl 左下、br 右下，預設左下
 const photos = [
-	{ src: p4, tagline: 'LIGHT THAT ONLY LASTS A MOMENT.', date: '2025.03' },
-	{ src: p3, tagline: 'THE CITY KEEPS ITS OWN RHYTHM.', date: '2025.05' },
-	{ src: p5, tagline: 'LIGHT THAT ONLY LASTS A MOMENT.', date: '2025.03' },
-	{ src: p2, tagline: 'THE CITY KEEPS ITS OWN RHYTHM.', date: '2025.05' },
+	{
+		src: p4,
+		tagline: 'KAOHSIUNG',
+		taglinePos: 'tr',
+		date: '2025.03',
+		datePos: 'bl',
+	},
+	{
+		src: p3,
+		tagline: 'TAINAN',
+		taglinePos: 'bl',
+		date: '2025.05',
+		datePos: 'bl',
+	},
+	{
+		src: p5,
+		tagline: 'SETOUCHI',
+		taglinePos: 'bl',
+		date: '2024.10',
+		datePos: 'bl',
+	},
+	{
+		src: p2,
+		tagline: 'TAINAN',
+		taglinePos: 'bl',
+		date: '2026.07',
+		datePos: 'br',
+	},
 ]
 
 const title = 'PHOTOGRAPHY'
@@ -17,7 +41,8 @@ const subtitle = 'world as I see it'
 
 const infos = useTemplateRef('infos')
 const heading = useTemplateRef('heading')
-const shown = ref(photos.map(() => false))
+// tagline 和 date 可能被放在不同角落，露出的時機不同，各自記
+const shown = reactive({})
 const titleShown = ref(false)
 
 let observer
@@ -29,7 +54,7 @@ onMounted(() => {
 				if (entry.target === heading.value) {
 					titleShown.value = entry.isIntersecting
 				} else {
-					shown.value[+entry.target.dataset.i] = entry.isIntersecting
+					shown[entry.target.dataset.key] = entry.isIntersecting
 				}
 			}
 		},
@@ -78,15 +103,22 @@ onBeforeUnmount(() => observer?.disconnect())
 				<div class="photo_img">
 					<img :src="photo.src" alt="" loading="lazy" />
 				</div>
-				<div
+				<span
 					ref="infos"
-					class="photo_info"
-					:class="{ 'is-inview': shown[i] }"
-					:data-i="i"
+					class="photo_info tagline"
+					:class="[photo.taglinePos ?? 'bl', { 'is-inview': shown[`${i}-t`] }]"
+					:data-key="`${i}-t`"
 				>
-					<span class="tagline">{{ photo.tagline }}</span>
-					<span class="date">{{ photo.date }}</span>
-				</div>
+					{{ photo.tagline }}
+				</span>
+				<span
+					ref="infos"
+					class="photo_info date"
+					:class="[photo.datePos ?? 'bl', { 'is-inview': shown[`${i}-d`] }]"
+					:data-key="`${i}-d`"
+				>
+					{{ photo.date }}
+				</span>
 			</article>
 		</div>
 	</section>
@@ -100,7 +132,7 @@ onBeforeUnmount(() => observer?.disconnect())
 	/* 卡片開始到結束 */
 	--step: calc(var(--rise) + var(--hold));
 	/* 第一 cut 字停留的距離 */
-	--lead: 40dvh;
+	--lead: 80dvh;
 
 	width: 100%;
 	/* 舞台自己一個視窗高，其餘都是釘住期間要走的距離 */
@@ -257,11 +289,8 @@ onBeforeUnmount(() => observer?.disconnect())
 /* 文字整塊露出來就自己播完，不跟捲動綁在一起 */
 .photo_info {
 	position: absolute;
-	left: var(--gutter);
-	bottom: var(--gutter);
 	z-index: 1;
-	display: flex;
-	flex-direction: column;
+	max-width: calc(100% - var(--gutter) * 2);
 	color: #fff;
 	line-height: 1.4;
 	user-select: none;
@@ -272,21 +301,44 @@ onBeforeUnmount(() => observer?.disconnect())
 		translate 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
+.photo_info.tl,
+.photo_info.tr {
+	top: var(--gutter);
+}
+
+.photo_info.bl,
+.photo_info.br {
+	bottom: var(--gutter);
+}
+
+.photo_info.tl,
+.photo_info.bl {
+	left: var(--gutter);
+}
+
+.photo_info.tr,
+.photo_info.br {
+	right: var(--gutter);
+	text-align: right;
+}
+
 .photo_info.is-inview {
 	opacity: 1;
 	translate: 0 0;
 }
 
-.photo_info .tagline {
-	font-size: clamp(1.25rem, 2.4vw, 2.5rem);
+.photo_info.tagline {
+	font-size: 6vw;
 	font-weight: 700;
 	letter-spacing: 0.04em;
+	top: 4%;
 }
 
-.photo_info .date {
+.photo_info.date {
 	font-size: clamp(0.75rem, 1vw, 1rem);
 	letter-spacing: 0.14em;
-	opacity: 0.8;
+	/* 用顏色壓淡就好，改 opacity 會蓋掉進場用的那個 */
+	color: #ffffffcc;
 }
 
 @media (prefers-reduced-motion: reduce) {

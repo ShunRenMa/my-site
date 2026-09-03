@@ -86,7 +86,7 @@ onBeforeUnmount(() => observer?.disconnect())
 				size="4em"
 			>
 				<template #tail>
-					<NuxtLink to="/work" class="portfolio_more">
+					<NuxtLink to="/works" class="portfolio_more">
 						View More
 						<svg
 							class="portfolio_more_arrow"

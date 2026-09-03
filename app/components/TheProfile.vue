@@ -138,7 +138,7 @@ const skills = [
 	min-height: 180vh;
 }
 .profile_content h1 {
-	font-size: 3em;
+	font-size: 4vw;
 }
 .profile_img {
 	width: 26vw;

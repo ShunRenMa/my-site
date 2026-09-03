@@ -69,6 +69,10 @@ const socials = [
 	color: #fff;
 	mix-blend-mode: difference;
 	pointer-events: none;
+	font-family: 'Lora', serif;
+	font-optical-sizing: auto;
+	font-weight: 600;
+	font-style: normal;
 }
 
 .nav a {
@@ -82,7 +86,7 @@ const socials = [
 
 .nav_name {
 	font-size: 0.9rem;
-	letter-spacing: 0.08em;
+	letter-spacing: 0.1em;
 }
 
 .nav_role {
@@ -109,8 +113,8 @@ const socials = [
 
 .nav_link {
 	position: relative;
-	font-size: 0.8rem;
-	letter-spacing: 0.08em;
+	font-size: 14px;
+	letter-spacing: 0.02em;
 }
 
 /* 看不見的感應區，把 hover 熱區上下各撐 25%，總高變 150% */

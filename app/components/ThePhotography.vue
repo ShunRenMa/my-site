@@ -12,8 +12,12 @@ const photos = [
 	{ src: p2, tagline: 'THE CITY KEEPS ITS OWN RHYTHM.', date: '2025.05' },
 ]
 
+const title = 'PHOTOGRAPHY'
+
 const infos = useTemplateRef('infos')
+const heading = useTemplateRef('heading')
 const shown = ref(photos.map(() => false))
+const titleShown = ref(false)
 
 let observer
 
@@ -21,7 +25,11 @@ onMounted(() => {
 	observer = new IntersectionObserver(
 		(entries) => {
 			for (const entry of entries) {
-				shown.value[+entry.target.dataset.i] = entry.isIntersecting
+				if (entry.target === heading.value) {
+					titleShown.value = entry.isIntersecting
+				} else {
+					shown.value[+entry.target.dataset.i] = entry.isIntersecting
+				}
 			}
 		},
 		{ threshold: 1 },
@@ -29,6 +37,7 @@ onMounted(() => {
 	for (const element of infos.value ?? []) {
 		observer.observe(element)
 	}
+	if (heading.value) observer.observe(heading.value)
 })
 
 onBeforeUnmount(() => observer?.disconnect())
@@ -37,7 +46,22 @@ onBeforeUnmount(() => observer?.disconnect())
 <template>
 	<section class="photography" :style="{ '--count': photos.length }">
 		<div class="photo_stage">
-			<div class="photo_tagline">PHOTOGRAPHY</div>
+			<div class="photo_tagline">
+				<span
+					ref="heading"
+					class="photo_tagline_text"
+					:class="{ 'is-inview': titleShown }"
+				>
+					<span
+						v-for="(char, i) in title"
+						:key="i"
+						class="char"
+						:style="{ '--i': i }"
+					>
+						<span>{{ char }}</span>
+					</span>
+				</span>
+			</div>
 			<article
 				v-for="(photo, i) in photos"
 				:key="i"
@@ -65,12 +89,11 @@ onBeforeUnmount(() => observer?.disconnect())
 .photography {
 	--rise: 100dvh;
 	--hold: 80dvh;
-	/* 翻上來時從幾倍大小開始，1 = 不縮放 */
 	--from-scale: 0.5;
-	/* 一張卡片從開始翻到停完，佔掉的捲動距離 */
+	/* 卡片開始到結束 */
 	--step: calc(var(--rise) + var(--hold));
-	/* 第一張翻上來之前，底下那行字獨自停留的距離 */
-	--lead: 60dvh;
+	/* 第一 cut 字停留的距離 */
+	--lead: 50dvh;
 
 	width: 100%;
 	/* 舞台自己一個視窗高，其餘都是釘住期間要走的距離 */
@@ -100,6 +123,34 @@ onBeforeUnmount(() => observer?.disconnect())
 	letter-spacing: 0.04em;
 	line-height: 1;
 	user-select: none;
+}
+
+/* 每個字一個遮罩，字從它的下緣升上來 */
+.photo_tagline .char {
+	display: inline-block;
+	overflow: hidden;
+	/* inline-block 的 overflow 一旦不是 visible，行框會被撐高，改成 top 對齊就不會 */
+	vertical-align: top;
+}
+
+.photo_tagline .char > span {
+	display: inline-block;
+	translate: 0 100%;
+}
+
+/* 整行露出來才播，每個字晚一點點出場就成了由左往右的波浪 */
+.photo_tagline .is-inview .char > span {
+	animation: char-rise 1s cubic-bezier(0.19, 1, 0.22, 1) both;
+	animation-delay: calc(var(--i) * 35ms);
+}
+
+@keyframes char-rise {
+	from {
+		translate: 0 100%;
+	}
+	to {
+		translate: 0 0;
+	}
 }
 
 .photo_card {
@@ -199,6 +250,9 @@ onBeforeUnmount(() => observer?.disconnect())
 	}
 	.photo_info {
 		opacity: 1;
+		translate: none;
+	}
+	.photo_tagline .char > span {
 		translate: none;
 	}
 }

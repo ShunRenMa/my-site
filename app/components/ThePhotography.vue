@@ -37,6 +37,7 @@ onBeforeUnmount(() => observer?.disconnect())
 <template>
 	<section class="photography" :style="{ '--count': photos.length }">
 		<div class="photo_stage">
+			<div class="photo_tagline">PHOTOGRAPHY</div>
 			<article
 				v-for="(photo, i) in photos"
 				:key="i"
@@ -68,10 +69,12 @@ onBeforeUnmount(() => observer?.disconnect())
 	--from-scale: 0.5;
 	/* 一張卡片從開始翻到停完，佔掉的捲動距離 */
 	--step: calc(var(--rise) + var(--hold));
+	/* 第一張翻上來之前，底下那行字獨自停留的距離 */
+	--lead: 60dvh;
 
 	width: 100%;
 	/* 舞台自己一個視窗高，其餘都是釘住期間要走的距離 */
-	height: calc(100dvh + var(--hold) + (var(--count) - 1) * var(--step));
+	height: calc(100dvh + var(--lead) + var(--count) * var(--step));
 	/* 這一段的進出視窗進度，就是下面每張卡片翻上來的依據 */
 	view-timeline: --photos block;
 }
@@ -85,13 +88,27 @@ onBeforeUnmount(() => observer?.disconnect())
 	overflow: hidden;
 }
 
+/* 卡片的 z-index 從 0 起跳，同層而排在前面，所以一律被蓋住 */
+.photo_tagline {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	display: grid;
+	place-items: center;
+	font-size: clamp(2.5rem, 7vw, 8rem);
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	line-height: 1;
+	user-select: none;
+}
+
 .photo_card {
 	position: absolute;
 	inset: 0;
 	/* 後面的疊在前面的上面 */
 	z-index: var(--i);
 	/* 這張卡片在「釘住期間」開始翻、翻完的兩個時間點，單位是捲動距離 */
-	--start: calc(var(--hold) + (var(--i) - 1) * var(--step));
+	--start: calc(var(--lead) + var(--i) * var(--step));
 	--end: calc(var(--start) + var(--rise));
 
 	translate: 0 100%;
@@ -104,11 +121,6 @@ onBeforeUnmount(() => observer?.disconnect())
 	 * 所以翻頁的進度跟使用者捲動的進度是一比一對上的。
 	 */
 	animation-range: contain var(--start) contain var(--end);
-}
-
-/* 第一張前面沒有釘住的區間可用，改用整段捲進視窗的那 100dvh 來翻 */
-.photo_card:first-child {
-	animation-range: entry 0% contain 0%;
 }
 
 @keyframes card-rise {

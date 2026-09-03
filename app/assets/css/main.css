@@ -1,0 +1,94 @@
+/* 全域樣式與設計 token。在 nuxt.config.ts 的 css 陣列註冊，所有頁面共用 */
+
+:root {
+	--gutter: 4vw;
+
+	/* 基礎 */
+	--bg: #f8f9fa;
+	--fg: #0f1419;
+	--fg-muted: #5c6b73;
+	--line: #0000009c;
+
+	/* 霧藍 H200 */
+	--blue-50: #e4eaee;
+	--blue-100: #bccbd4;
+	--blue-300: #94adba;
+	--blue-400: #7091a2;
+	--blue-500: #547585;
+	--blue-700: #405c6a;
+	--blue-900: #2f4551;
+
+	--accent: var(--blue-500);
+	--accent-hover: var(--blue-700);
+
+	/* 保留原本的粉，給分類標記用 */
+	--pink: #faa59e;
+
+	/* 自訂游標的顏色，hero 的裝飾線也共用這個值 */
+	--cursor-color: #7d97b8;
+
+	--font-sans:
+		'Inter Tight', 'Noto Sans JP', -apple-system, 'Hiragino Kaku Gothic ProN',
+		Meiryo, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font-family: var(--font-sans);
+	font-weight: 400;
+	line-height: 2;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+::selection {
+	background: var(--fg);
+	color: var(--bg);
+}
+
+.page-enter-active,
+.page-leave-active {
+	transition: opacity 0.8s ease;
+}
+.page-enter-from,
+.page-leave-to {
+	opacity: 0;
+}
+
+.block {
+	display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-delay: 0s !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		transition-delay: 0s !important;
+		scroll-behavior: auto !important;
+	}
+}

@@ -70,8 +70,9 @@ defineProps({
 }
 
 .tagLine_group .pipe {
-	font-weight: 300;
-	color: var(--fg-muted);
+	font-weight: 700;
+	color: black;
+	transform: scaleX(0.4);
 }
 
 .tagLine_group .word {

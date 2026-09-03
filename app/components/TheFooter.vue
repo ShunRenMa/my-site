@@ -3,7 +3,6 @@ const itemClass = 'nav_item'
 const itemTitleClass = 'nav_item_title'
 const itemContentClass = 'nav_item_content'
 const siteMap = {
-	ABOUT: '/about',
 	CONTACT: '/contact',
 }
 const workObj = {
@@ -19,7 +18,6 @@ const navArray = [
 	[{ name: 'HOME', url: '/' }],
 	[
 		{ name: 'WORKS', url: '/works' },
-		{ name: 'ABOUT', url: '/about' },
 		{ name: 'CONTACT', url: '/contact' },
 	],
 	[

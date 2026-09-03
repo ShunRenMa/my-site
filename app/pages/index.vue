@@ -82,6 +82,8 @@ const layoutClass = 'layout'
 
 		<TheTagLine text="PERSONAL" />
 		<ThePhotography />
+
+		<TheTagLine text="THANK YOU FOR READING" />
 	</div>
 </template>
 

@@ -3,7 +3,7 @@ const itemClass = 'nav_item'
 const itemTitleClass = 'nav_item_title'
 const itemContentClass = 'nav_item_content'
 const siteMap = {
-	CONTACT: '/contact',
+	CONTACT: 'mailto:e12813726@gmail.com',
 }
 const workObj = {
 	GITHUB: 'https://github.com/ShunRenMa',
@@ -18,7 +18,7 @@ const navArray = [
 	[{ name: 'HOME', url: '/' }],
 	[
 		{ name: 'WORKS', url: '/works' },
-		{ name: 'CONTACT', url: '/contact' },
+		{ name: 'CONTACT', url: 'mailto:e12813726@gmail.com' },
 	],
 	[
 		{ name: 'GITHUB', url: 'https://github.com/ShunRenMa' },
@@ -41,9 +41,13 @@ const navArray = [
 								<NuxtLink v-if="item.url.startsWith('/')" :to="item.url">{{
 									item.name
 								}}</NuxtLink>
-								<a v-else :href="item.url" target="_blank" rel="noopener">{{
-									item.name
-								}}</a>
+								<a
+									v-else
+									:href="item.url"
+									:target="item.url.startsWith('http') ? '_blank' : null"
+									rel="noopener"
+									>{{ item.name }}</a
+								>
 							</li>
 						</ul>
 					</div>

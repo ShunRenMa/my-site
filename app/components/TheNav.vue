@@ -1,7 +1,7 @@
 <script setup lang="js">
 const pages = [
 	{ name: 'WORKS', url: '/works' },
-	{ name: 'CONTACT', url: '/contact' },
+	{ name: 'CONTACT', url: 'mailto:e12813726@gmail.com' },
 ]
 
 const socials = [
@@ -28,7 +28,13 @@ const socials = [
 		<div class="nav_menu">
 			<ul class="nav_pages">
 				<li v-for="page in pages" :key="page.name">
-					<NuxtLink :to="page.url" class="nav_link">{{ page.name }}</NuxtLink>
+					<NuxtLink
+						v-if="page.url.startsWith('/')"
+						:to="page.url"
+						class="nav_link"
+						>{{ page.name }}</NuxtLink
+					>
+					<a v-else :href="page.url" class="nav_link">{{ page.name }}</a>
 				</li>
 			</ul>
 
@@ -63,7 +69,7 @@ const socials = [
 	gap: 20px;
 	width: 100%;
 	/* 垂直只吃這個值，水平仍對齊 hero 的 --gutter */
-	padding: 1.25rem var(--gutter);
+	padding: 8px var(--gutter);
 	line-height: 1.3;
 	flex-direction: row-reverse;
 	color: #fff;

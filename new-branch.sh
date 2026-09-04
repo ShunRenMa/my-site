@@ -31,7 +31,7 @@ while git show-ref --verify --quiet "refs/heads/$PREFIX.$n" \
 done
 
 BRANCH="$PREFIX.$n"
-git switch -c "$BRANCH" "$START"
+git switch --no-track -c "$BRANCH" "$START"
 
 echo ""
 echo "已從 $START 建立並切換到 $BRANCH"

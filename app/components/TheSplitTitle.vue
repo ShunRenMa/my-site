@@ -1,8 +1,4 @@
 <script setup>
-/**
- * 逐字浮起 + 底線掃過的標題。捲到位才播，只播一次。
- * 用 \n 分行，空白分字，字元再各自拆成一個 span。
- */
 const props = defineProps({
 	text: { type: String, required: true },
 	// 一頁只該有一個 h1，其他地方用 h2

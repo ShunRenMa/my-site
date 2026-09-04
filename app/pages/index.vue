@@ -1,5 +1,10 @@
 <script setup>
 const layoutClass = 'layout'
+
+useSeo({
+	title: 'Baird MA / Frontend Engineer/Photographer',
+	description: 'Frontend engineer and photographer in Taiwan.',
+})
 </script>
 
 <template>

@@ -9,6 +9,12 @@ import door from '../assets/images/Door.webp'
 import bottom from '../assets/images/bottom.webp'
 import autoSolve from '../assets/images/autoSolve.webp'
 import fullway from '../assets/images/fullway.webp'
+
+useSeo({
+	title: 'Baird MA / Frontend Engineer/Photographer - Works',
+	description: 'Frontend engineer and photographer in Taiwan.',
+})
+
 const works = {
 	ad: [
 		{

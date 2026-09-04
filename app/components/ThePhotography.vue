@@ -39,10 +39,10 @@ const photos = [
 const title = 'PHOTOGRAPHY'
 const subtitle = 'world as I see it'
 
-const infos = useTemplateRef('infos')
+const cards = useTemplateRef('cards')
 const heading = useTemplateRef('heading')
-// tagline 和 date 可能被放在不同角落，露出的時機不同，各自記
 const shown = reactive({})
+const infoClass = (key) => (shown[key] ? `is-${shown[key]}` : null)
 const titleShown = ref(false)
 
 let observer
@@ -53,14 +53,20 @@ onMounted(() => {
 			for (const entry of entries) {
 				if (entry.target === heading.value) {
 					titleShown.value = entry.isIntersecting
-				} else {
-					shown[entry.target.dataset.key] = entry.isIntersecting
+					continue
+				}
+
+				const key = entry.target.dataset.key
+				if (entry.intersectionRatio >= 0.85) {
+					shown[key] = 'inview'
+				} else if (entry.intersectionRatio < 0.2) {
+					shown[key] = 'out'
 				}
 			}
 		},
-		{ threshold: 1 },
+		{ threshold: [0.2, 0.85] },
 	)
-	for (const element of infos.value ?? []) {
+	for (const element of cards.value ?? []) {
 		observer.observe(element)
 	}
 	if (heading.value) observer.observe(heading.value)
@@ -97,25 +103,23 @@ onBeforeUnmount(() => observer?.disconnect())
 			<article
 				v-for="(photo, i) in photos"
 				:key="i"
+				ref="cards"
 				class="photo_card"
 				:style="{ '--i': i }"
+				:data-key="i"
 			>
 				<div class="photo_img">
 					<img :src="photo.src" alt="" loading="lazy" />
 				</div>
 				<span
-					ref="infos"
 					class="photo_info tagline"
-					:class="[photo.taglinePos ?? 'bl', { 'is-inview': shown[`${i}-t`] }]"
-					:data-key="`${i}-t`"
+					:class="[photo.taglinePos ?? 'bl', infoClass(i)]"
 				>
 					<span class="photo_info_text">{{ photo.tagline }}</span>
 				</span>
 				<span
-					ref="infos"
 					class="photo_info date"
-					:class="[photo.datePos ?? 'bl', { 'is-inview': shown[`${i}-d`] }]"
-					:data-key="`${i}-d`"
+					:class="[photo.datePos ?? 'bl', infoClass(i)]"
 				>
 					<span class="photo_info_text">{{ photo.date }}</span>
 				</span>
@@ -302,6 +306,24 @@ onBeforeUnmount(() => observer?.disconnect())
 	--to: right;
 	--clip-hidden: inset(0 100% 0 0);
 	--block-color: #fff;
+
+	opacity: 0;
+	transition:
+		opacity 0.5s ease-out,
+		translate 0.5s ease-out;
+}
+
+.photo_info.is-inview {
+	opacity: 1;
+}
+
+.photo_info.is-out {
+	opacity: 0;
+	translate: 0 0.6rem;
+}
+
+.photo_info.is-out .photo_info_text {
+	clip-path: inset(0 0 0 0);
 }
 
 /* 色塊上下多吃一點，字才不會頂到邊；左右必須切齊，收邊和刷字才對得上 */
@@ -404,11 +426,20 @@ onBeforeUnmount(() => observer?.disconnect())
 	color: #ffffffcc;
 }
 
+@media (max-width: 768px) {
+	.photo_info.tagline {
+		font-size: 3em;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.photo_card {
 		animation: none;
 		translate: none;
 		scale: none;
+	}
+	.photo_info {
+		transition: none;
 	}
 	.photo_info::after {
 		display: none;

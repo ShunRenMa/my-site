@@ -232,10 +232,14 @@ const layoutClass = 'layout'
 	right: var(--gutter);
 	top: var(--gutter);
 	z-index: 1001;
-	text-align: left;
+	text-align: center;
 	color: white;
 	user-select: none;
 	letter-spacing: 0.2rem;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
 }
 
 /* 每行整行不斷字，寬度不夠就靠字級縮，不靠換行 */
@@ -290,8 +294,7 @@ const layoutClass = 'layout'
 @media (max-width: 768px) {
 	.hero_content {
 		font-size: 6vw;
-		/* 固定 rem 的字距不會跟著字級縮，改成 em 才算得準 */
-		letter-spacing: 0.05em;
+		letter-spacing: normal;
 	}
 }
 

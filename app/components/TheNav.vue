@@ -21,6 +21,7 @@ const copyRight = '© 2026 ShunRen Ma.'
 
 const route = useRoute()
 const open = ref(false)
+const hidden = ref(false)
 
 watch(
 	() => route.fullPath,
@@ -34,7 +35,32 @@ watch(open, (v) => {
 	document.body.style.overflow = v ? 'hidden' : ''
 })
 
+// 往下滑收起漢堡鈕，往上滑或回到頂端再出現
+let lastY = 0
+let ticking = false
+
+function updateBurger() {
+	const y = window.scrollY
+	if (open.value) hidden.value = false
+	else if (y > lastY && y > 80) hidden.value = true
+	else if (y < lastY) hidden.value = false
+	lastY = y
+	ticking = false
+}
+
+function onScroll() {
+	if (ticking) return
+	ticking = true
+	requestAnimationFrame(updateBurger)
+}
+
+onMounted(() => {
+	lastY = window.scrollY
+	window.addEventListener('scroll', onScroll, { passive: true })
+})
+
 onBeforeUnmount(() => {
+	window.removeEventListener('scroll', onScroll)
 	document.body.style.overflow = ''
 })
 </script>
@@ -74,7 +100,7 @@ onBeforeUnmount(() => {
 		<button
 			type="button"
 			class="nav_burger"
-			:class="{ 'is-open': open }"
+			:class="{ 'is-open': open, 'is-hidden': hidden && !open }"
 			:aria-expanded="open"
 			aria-controls="nav-panel"
 			:aria-label="open ? 'Close menu' : 'Open menu'"
@@ -231,49 +257,63 @@ onBeforeUnmount(() => {
 	fill: currentColor;
 }
 
-/* 漢堡鈕：桌機不出現 */
+/* 漢堡鈕：桌機不出現。尺寸跟著螢幕寬縮放，位置固定在右上角 */
 .nav_burger {
+	--burger: clamp(36px, 12vw, 44px);
+	--bar-gap: calc(var(--burger) * 0.14);
+
 	display: none;
-	position: relative;
+	position: fixed;
+	top: 0.5rem;
+	right: var(--gutter);
 	z-index: 2;
-	width: 44px;
-	height: 44px;
-	margin-right: calc(var(--gutter) * -0.5);
+	width: var(--burger);
+	height: var(--burger);
 	padding: 0;
 	border: 0;
 	background: none;
-	color: inherit;
+	/* 深色為主，再靠白色陰影在深色照片上撐出對比 */
+	color: var(--fg);
+	filter: drop-shadow(0 0 3px rgb(255 255 255 / 55%));
 	cursor: pointer;
 	pointer-events: auto;
-	mix-blend-mode: difference;
+	transition:
+		transform 0.4s ease,
+		opacity 0.4s ease;
+}
+
+.nav_burger.is-hidden {
+	transform: translateY(calc(var(--burger) * -1.6));
+	opacity: 0;
+	pointer-events: none;
 }
 
 .nav_burger span {
 	position: absolute;
-	left: 50%;
-	width: 22px;
+	left: 25%;
+	width: 60%;
 	height: 1.5px;
-	margin-left: -11px;
-	background: currentColor;
+	margin-top: -0.75px;
+	background: #6a6a6a;
 	transition:
 		transform 0.4s ease,
 		opacity 0.3s ease;
 }
 
 .nav_burger span:nth-child(1) {
-	top: 16px;
+	top: calc(50% - var(--bar-gap));
 }
 
 .nav_burger span:nth-child(2) {
-	top: 22px;
+	top: 50%;
 }
 
 .nav_burger span:nth-child(3) {
-	top: 28px;
+	top: calc(50% + var(--bar-gap));
 }
 
 .nav_burger.is-open span:nth-child(1) {
-	transform: translateY(6px) rotate(45deg);
+	transform: translateY(var(--bar-gap)) rotate(45deg);
 }
 
 .nav_burger.is-open span:nth-child(2) {
@@ -281,7 +321,7 @@ onBeforeUnmount(() => {
 }
 
 .nav_burger.is-open span:nth-child(3) {
-	transform: translateY(-6px) rotate(-45deg);
+	transform: translateY(calc(var(--bar-gap) * -1)) rotate(-45deg);
 }
 
 /* 選單開啟時壓暗底下的頁面，點一下也能關 */

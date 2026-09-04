@@ -106,6 +106,12 @@ onBeforeUnmount(() => observer?.disconnect())
 	line-height: 1.9;
 }
 
+h2 {
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+}
 @media (prefers-reduced-motion: reduce) {
 	.workCard {
 		transition: none;

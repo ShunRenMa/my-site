@@ -54,9 +54,38 @@ const stage = useTemplateRef('stage')
 // 捲到位才讓影片區浮出來
 const marqueeShown = useInviewOnce(stage)
 
+// JS 量到之前先給個保守值，靜態輸出的第一幀才不會橫向溢出
+const titleSize = ref('min(4em, 14vw)')
+
+/*
+ * 手機把標題縮到剛好滿一行。沒有載自訂字體，實際字寬會隨裝置的
+ * 系統字而變，所以量了再算，不寫死 vw。
+ * 字寬跟字級是線性的，一次就能算出正確值。
+ */
+function fitTitle() {
+	// SplitTitle 的模板有註解節點，$el 會拿到 fragment 的錨點而不是元素，所以從 DOM 找
+	const el = stage.value?.querySelector('.portfolio_title')
+	const word = el?.querySelector('.splitTitle_line div')
+	if (!word) return
+
+	if (window.innerWidth > 768) {
+		titleSize.value = '4em'
+		return
+	}
+
+	const current = parseFloat(getComputedStyle(el).fontSize)
+	const fitted = (current * el.clientWidth) / word.offsetWidth
+	// 無條件捨去，避免小數進位後多出來的那一點點撐破版面
+	titleSize.value = `${Math.floor(fitted * 100) / 100}px`
+}
+
 let observer
 
 onMounted(() => {
+	fitTitle()
+	document.fonts?.ready.then(fitTitle)
+	window.addEventListener('resize', fitTitle)
+
 	if (!stage.value) return
 
 	const videos = Array.from(stage.value.querySelectorAll('video'))
@@ -73,7 +102,10 @@ onMounted(() => {
 	observer.observe(stage.value)
 })
 
-onBeforeUnmount(() => observer?.disconnect())
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', fitTitle)
+	observer?.disconnect()
+})
 </script>
 
 <template>
@@ -83,7 +115,7 @@ onBeforeUnmount(() => observer?.disconnect())
 				class="portfolio_title"
 				text="Portfolio."
 				line="static"
-				size="4em"
+				:size="titleSize"
 			>
 				<template #tail>
 					<NuxtLink to="/works" class="portfolio_more">
@@ -274,6 +306,19 @@ onBeforeUnmount(() => observer?.disconnect())
 	.portfolio_col:nth-child(n + 3) {
 		display: none;
 	}
+
+	/* 標題已經吃滿一行，按鈕退回文件流換到下一行 */
+	.portfolio_title :deep(.splitTitle_tail) {
+		position: static;
+		display: block;
+		width: fit-content;
+		margin-left: auto;
+	}
+
+	/* 外層有 line-height: 0，inline-block 的下緣會被裁掉 */
+	.portfolio_title :deep(.splitTitle_tailInner) {
+		display: block;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -354,6 +399,8 @@ onBeforeUnmount(() => observer?.disconnect())
 
 .portfolio_title {
 	margin: 0;
+	/* 不讓字元之間斷行，量到的才會是整串字真正的寬度 */
+	white-space: nowrap;
 	font-weight: bold;
 	/*
 	 * 用 text-transform 而不是直接把 text 寫成大寫，

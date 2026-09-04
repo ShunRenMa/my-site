@@ -226,14 +226,22 @@ const layoutClass = 'layout'
 
 .hero_content {
 	position: absolute;
-	font-size: 4vw;
+	/* 4vw 在手機上只剩 15px 左右，用 max 撐出下限 */
+	font-size: max(2.25rem, 4vw);
 	left: var(--gutter);
+	right: var(--gutter);
 	top: var(--gutter);
 	z-index: 1001;
 	text-align: left;
 	color: white;
 	user-select: none;
 	letter-spacing: 0.2rem;
+}
+
+/* 每行整行不斷字，寬度不夠就靠字級縮，不靠換行 */
+.hero_title_fst,
+.hero_title_sec {
+	white-space: nowrap;
 }
 
 .hero_content span {
@@ -275,6 +283,18 @@ const layoutClass = 'layout'
  * main.css 那組全域的 duration 歸零就管不到，得在這裡個別關掉。
  * 其餘時間驅動的過渡與動畫都由 main.css 統一處理。
  */
+/*
+ * 手機寬度塞不下 36px 的整行，字級改由視窗寬度決定。
+ * 最長的 Building For The World. 約 13.5em，6vw 下剛好落在 92vw 內。
+ */
+@media (max-width: 768px) {
+	.hero_content {
+		font-size: 6vw;
+		/* 固定 rem 的字距不會跟著字級縮，改成 em 才算得準 */
+		letter-spacing: 0.05em;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.hero_title_fst div span,
 	.hero_title_sec div span {

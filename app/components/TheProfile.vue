@@ -135,7 +135,7 @@ const skills = [
 
 .profile_content {
 	grid-column: 3 / -1; /* 從 GITHUB 那欄起算 */
-	min-height: 180vh;
+	min-height: 120vh;
 }
 .profile_content h1 {
 	font-size: 4vw;

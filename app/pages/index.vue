@@ -181,11 +181,14 @@ const wipeEnd = useState('wipeEnd')
 	/* 填滿容器、多的裁掉，所以任何比例的視窗都是滿版 */
 	object-fit: cover;
 	display: block;
-	animation: hero-scroll linear both;
+	animation:
+		hero-scroll linear both,
+		hero-breath 12s ease-in-out infinite;
 	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
-	animation-timeline: scroll(root block);
-	/* 對應 .hero_block 的高度：hero 完全捲出畫面時剛好跑完 */
-	animation-range: 0 var(--hero-h);
+	animation-timeline: scroll(root block), auto;
+	animation-range:
+		0 var(--hero-h),
+		normal;
 }
 
 @keyframes hero-scroll {
@@ -194,6 +197,13 @@ const wipeEnd = useState('wipeEnd')
 	}
 	to {
 		transform: translateY(0) scale(1.1);
+	}
+}
+
+/* 用個別屬性 scale，跟上面的 transform 相乘而不是覆蓋 */
+@keyframes hero-breath {
+	50% {
+		scale: 1.05;
 	}
 }
 

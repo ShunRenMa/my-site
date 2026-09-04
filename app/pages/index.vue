@@ -102,7 +102,6 @@ useSeo({
 	height: var(--hero-h);
 }
 .hero {
-	/* 讓 hero 內的 absolute 元素以它為基準，而不是整個視窗 */
 	position: relative;
 	overflow: hidden;
 }

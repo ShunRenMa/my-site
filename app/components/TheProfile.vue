@@ -24,7 +24,7 @@ const skills = [
 	'Leadership',
 	'Jest',
 	'Git',
-	'UI/UX...?',
+	// 'UI/UX',
 	'＋',
 ]
 </script>
@@ -274,6 +274,35 @@ const skills = [
 	}
 	100% {
 		transform: translateY(200px);
+	}
+}
+
+/* 手機改成單欄直排：照片在上、文字在下 */
+@media (max-width: 768px) {
+	.profile {
+		grid-template-columns: 1fr;
+		padding: 16vw 0;
+	}
+
+	.profile_img_wrapper {
+		grid-column: 1 / -1;
+		/* 單欄排下來沒有並排的另一欄可以跟，sticky 與漂移都失去意義 */
+		position: static;
+		animation: none;
+		margin-bottom: 12vw;
+	}
+
+	.profile_img {
+		width: 100%;
+	}
+
+	.profile_content {
+		grid-column: 1 / -1;
+		min-height: auto;
+	}
+
+	.profile_content h1 {
+		font-size: max(2rem, 4vw);
 	}
 }
 

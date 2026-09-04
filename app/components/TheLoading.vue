@@ -4,6 +4,7 @@ const TIMEOUT = 4000
 // 揭幕動畫長度
 const OUT = 1700
 const BACKSTOP = OUT + 400
+const KNEE = 0.65
 const R = 54
 const C = 2 * Math.PI * R
 
@@ -56,7 +57,12 @@ onMounted(() => {
 	const start = performance.now()
 	const tick = (now: number) => {
 		const t = Math.min((now - start) / DURATION, 1)
-		const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+		// KNEE 之前衝到 90%，之後慢慢磨完剩下的
+		const u = t / KNEE
+		const eased =
+			t < KNEE
+				? 0.9 * (u < 0.5 ? 4 * u ** 3 : 1 - Math.pow(-2 * u + 2, 3) / 2)
+				: 0.9 + (0.1 * (t - KNEE)) / (1 - KNEE)
 		progress.value = Math.min(Math.round(eased * 100), 99)
 		raf = requestAnimationFrame(tick)
 	}

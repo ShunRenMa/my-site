@@ -49,7 +49,7 @@ const skills = [
 			<TheSplitTitle
 				tag="h1"
 				class="profile_title"
-				:text="'Hi, I Am Baird.\nA Frontend Engineer.'"
+				:text="'HI, I Am Baird.\nA Frontend Engineer.'"
 			/>
 
 			<div

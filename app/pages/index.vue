@@ -5,11 +5,13 @@ useSeo({
 	title: 'Baird MA / Frontend Engineer/Photographer',
 	description: 'Frontend engineer and photographer in Taiwan.',
 })
+
+const wipeEnd = useState('wipeEnd')
 </script>
 
 <template>
 	<div :class="layoutClass">
-		<section class="hero hero_block">
+		<section class="hero hero_block" :class="{ 'is-wipe-end': wipeEnd }">
 			<div class="hero_content">
 				<span class="hero_title_fst">
 					<div>
@@ -102,7 +104,6 @@ useSeo({
 	height: var(--hero-h);
 }
 .hero {
-	/* 讓 hero 內的 absolute 元素以它為基準，而不是整個視窗 */
 	position: relative;
 	overflow: hidden;
 }
@@ -131,6 +132,11 @@ useSeo({
 	 * 兩個是不同的 CSS 屬性，所以兩個動畫可以同時掛在同一個元素上不打架。
 	 */
 	translate: 0 100%;
+}
+
+/* 等 loading 揭幕（wipeEnd）才掛動畫，不然字會在幕後面先跑完 */
+.is-wipe-end .hero_title_fst div span,
+.is-wipe-end .hero_title_sec div span {
 	animation:
 		char-rise 1s cubic-bezier(0.19, 1, 0.22, 1) both,
 		char-retract linear both;
@@ -175,11 +181,14 @@ useSeo({
 	/* 填滿容器、多的裁掉，所以任何比例的視窗都是滿版 */
 	object-fit: cover;
 	display: block;
-	animation: hero-scroll linear both;
+	animation:
+		hero-scroll linear both,
+		hero-breath 12s ease-in-out infinite;
 	/* 注意：animation-timeline 必須寫在 animation 簡寫之後，否則會被重設成 auto */
-	animation-timeline: scroll(root block);
-	/* 對應 .hero_block 的高度：hero 完全捲出畫面時剛好跑完 */
-	animation-range: 0 var(--hero-h);
+	animation-timeline: scroll(root block), auto;
+	animation-range:
+		0 var(--hero-h),
+		normal;
 }
 
 @keyframes hero-scroll {
@@ -188,6 +197,13 @@ useSeo({
 	}
 	to {
 		transform: translateY(0) scale(1.1);
+	}
+}
+
+/* 用個別屬性 scale，跟上面的 transform 相乘而不是覆蓋 */
+@keyframes hero-breath {
+	50% {
+		scale: 1.05;
 	}
 }
 
@@ -309,7 +325,9 @@ useSeo({
 
 @media (prefers-reduced-motion: reduce) {
 	.hero_title_fst div span,
-	.hero_title_sec div span {
+	.hero_title_sec div span,
+	.is-wipe-end .hero_title_fst div span,
+	.is-wipe-end .hero_title_sec div span {
 		animation: none;
 		translate: none;
 	}

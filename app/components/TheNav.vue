@@ -420,6 +420,7 @@ onBeforeUnmount(() => {
 	.nav {
 		align-items: center;
 		padding-block: 0.5rem;
+		mix-blend-mode: unset;
 	}
 
 	.panel_link {

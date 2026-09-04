@@ -80,6 +80,18 @@ img {
 	display: block;
 }
 
+/* 膠囊標籤。profile 的技能列與 works 的分類共用 */
+.tag {
+	padding: 0.15em 0.8em;
+	border-radius: 6px;
+	background-color: #b3b3b3;
+	color: #fff;
+	font-size: 0.85em;
+	letter-spacing: 0.02em;
+	line-height: 1.9;
+	white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	*,
 	*::before,

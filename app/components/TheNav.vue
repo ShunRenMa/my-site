@@ -1,5 +1,6 @@
 <script setup lang="js">
 const pages = [
+	{ name: 'HOME', url: '/' },
 	{ name: 'WORKS', url: '/works' },
 	{ name: 'CONTACT', url: 'mailto:e12813726@gmail.com' },
 ]
@@ -177,12 +178,13 @@ onBeforeUnmount(() => {
 	padding: 8px var(--gutter);
 	line-height: 1.3;
 	flex-direction: row-reverse;
-	color: #fff;
+	color: #767676;
 	pointer-events: none;
 	font-family: 'Lora', serif;
 	font-optical-sizing: auto;
 	font-weight: 600;
 	font-style: normal;
+	mix-blend-mode: difference;
 }
 
 .nav a {
@@ -193,14 +195,13 @@ onBeforeUnmount(() => {
 	display: flex;
 	align-items: center;
 	gap: 20px;
-	mix-blend-mode: difference;
 }
 
 .nav_pages,
 .nav_socials {
 	display: flex;
 	align-items: center;
-	gap: 1.5rem;
+	gap: 20px;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -209,7 +210,7 @@ onBeforeUnmount(() => {
 .nav_link {
 	position: relative;
 	font-size: 14px;
-	letter-spacing: 0.02em;
+	/* letter-spacing: 0.02em; */
 }
 
 /* 看不見的感應區，把 hover 熱區上下各撐 25%，總高變 150% */

@@ -171,6 +171,10 @@ onBeforeUnmount(() => observer?.disconnect())
 	letter-spacing: 0.04em;
 	line-height: 1;
 	user-select: none;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
 }
 
 .photo_tagline_sub {
@@ -347,14 +351,14 @@ onBeforeUnmount(() => observer?.disconnect())
 
 /* 0.45s = 色塊開始撤的時間，時長和緩動都跟它的收邊那段一致 */
 .photo_info.is-inview .photo_info_text {
-	animation: info-text 0.45s cubic-bezier(0.7, 0, 0.3, 1) 0.45s both;
+	animation: info-text 0.45s cubic-bezier(1, -0.05, 0, 1.05) 0.45s both;
 }
 
 @keyframes info-block {
 	0% {
 		transform: scaleX(0);
 		transform-origin: var(--from) center;
-		animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+		animation-timing-function: cubic-bezier(1, -0.05, 0, 1.05);
 	}
 	35% {
 		transform: scaleX(1);
@@ -364,7 +368,7 @@ onBeforeUnmount(() => observer?.disconnect())
 	50% {
 		transform: scaleX(1);
 		transform-origin: var(--to) center;
-		animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+		animation-timing-function: cubic-bezier(1, -0.05, 0, 1.05);
 	}
 	100% {
 		transform: scaleX(0);

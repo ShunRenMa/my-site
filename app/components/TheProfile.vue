@@ -101,7 +101,7 @@ const skills = [
 					BTW, I built the website from Vue + Nuxt.
 				</span>
 				<span class="content_sm block skill_block">
-					<span v-for="skill in skills" :key="skill" class="skill">
+					<span v-for="skill in skills" :key="skill" class="tag skill">
 						{{ skill }}
 					</span>
 				</span>
@@ -237,14 +237,6 @@ const skills = [
 }
 
 .skill {
-	padding: 0.15em 0.8em;
-	border-radius: 6px;
-	background-color: #b3b3b3;
-	font-size: 0.85em;
-	letter-spacing: 0.02em;
-	line-height: 1.9;
-	color: #fff;
-	white-space: nowrap;
 	/* 整排一起浮上來，比整塊內文慢 0.35s 起跑 */
 	opacity: 0;
 	translate: 0 0.5rem;

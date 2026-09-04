@@ -16,15 +16,31 @@ const socials = [
 		path: 'M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.439.645 1.439 1.439z',
 	},
 ]
+
+const copyRight = '© 2026 ShunRen Ma.'
+
+const route = useRoute()
+const open = ref(false)
+
+watch(
+	() => route.fullPath,
+	() => {
+		open.value = false
+	},
+)
+
+// 選單開啟時鎖住背景捲動
+watch(open, (v) => {
+	document.body.style.overflow = v ? 'hidden' : ''
+})
+
+onBeforeUnmount(() => {
+	document.body.style.overflow = ''
+})
 </script>
 
 <template>
 	<nav class="nav">
-		<!-- <NuxtLink to="/" class="nav_brand">
-			<span class="nav_name">SHUNREN MA</span>
-			<span class="nav_role">Frontend Developer</span>
-		</NuxtLink> -->
-
 		<div class="nav_menu">
 			<ul class="nav_pages">
 				<li v-for="page in pages" :key="page.name">
@@ -54,6 +70,69 @@ const socials = [
 				</li>
 			</ul>
 		</div>
+
+		<button
+			type="button"
+			class="nav_burger"
+			:class="{ 'is-open': open }"
+			:aria-expanded="open"
+			aria-controls="nav-panel"
+			:aria-label="open ? 'Close menu' : 'Open menu'"
+			@click="open = !open"
+		>
+			<span /><span /><span />
+		</button>
+
+		<div
+			class="panel_backdrop"
+			:class="{ 'is-open': open }"
+			@click="open = false"
+		/>
+
+		<div
+			id="nav-panel"
+			class="panel"
+			:class="{ 'is-open': open }"
+			:aria-hidden="!open"
+		>
+			<ul class="panel_list">
+				<li v-for="page in pages" :key="page.name">
+					<NuxtLink
+						v-if="page.url.startsWith('/')"
+						:to="page.url"
+						class="panel_link"
+						:tabindex="open ? 0 : -1"
+						>{{ page.name }}</NuxtLink
+					>
+					<a
+						v-else
+						:href="page.url"
+						class="panel_link"
+						:tabindex="open ? 0 : -1"
+						>{{ page.name }}</a
+					>
+				</li>
+
+				<li class="panel_socials">
+					<a
+						v-for="social in socials"
+						:key="social.name"
+						:href="social.url"
+						target="_blank"
+						rel="noopener"
+						:aria-label="social.name"
+						class="panel_icon"
+						:tabindex="open ? 0 : -1"
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path :d="social.path" />
+						</svg>
+					</a>
+				</li>
+			</ul>
+
+			<p class="panel_copy">{{ copyRight }}</p>
+		</div>
 	</nav>
 </template>
 
@@ -73,7 +152,6 @@ const socials = [
 	line-height: 1.3;
 	flex-direction: row-reverse;
 	color: #fff;
-	mix-blend-mode: difference;
 	pointer-events: none;
 	font-family: 'Lora', serif;
 	font-optical-sizing: auto;
@@ -85,26 +163,11 @@ const socials = [
 	pointer-events: auto;
 }
 
-.nav_brand {
-	display: flex;
-	flex-direction: column;
-}
-
-.nav_name {
-	font-size: 0.9rem;
-	letter-spacing: 0.1em;
-}
-
-.nav_role {
-	font-size: 0.7rem;
-	letter-spacing: 0.04em;
-	opacity: 0.7;
-}
-
 .nav_menu {
 	display: flex;
 	align-items: center;
 	gap: 20px;
+	mix-blend-mode: difference;
 }
 
 .nav_pages,
@@ -168,19 +231,173 @@ const socials = [
 	fill: currentColor;
 }
 
-@media (max-width: 640px) {
+/* 漢堡鈕：桌機不出現 */
+.nav_burger {
+	display: none;
+	position: relative;
+	z-index: 2;
+	width: 44px;
+	height: 44px;
+	margin-right: calc(var(--gutter) * -0.5);
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	pointer-events: auto;
+	mix-blend-mode: difference;
+}
+
+.nav_burger span {
+	position: absolute;
+	left: 50%;
+	width: 22px;
+	height: 1.5px;
+	margin-left: -11px;
+	background: currentColor;
+	transition:
+		transform 0.4s ease,
+		opacity 0.3s ease;
+}
+
+.nav_burger span:nth-child(1) {
+	top: 16px;
+}
+
+.nav_burger span:nth-child(2) {
+	top: 22px;
+}
+
+.nav_burger span:nth-child(3) {
+	top: 28px;
+}
+
+.nav_burger.is-open span:nth-child(1) {
+	transform: translateY(6px) rotate(45deg);
+}
+
+.nav_burger.is-open span:nth-child(2) {
+	opacity: 0;
+}
+
+.nav_burger.is-open span:nth-child(3) {
+	transform: translateY(-6px) rotate(-45deg);
+}
+
+/* 選單開啟時壓暗底下的頁面，點一下也能關 */
+.panel_backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	display: none;
+	background: rgb(26 26 26 / 60%);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition:
+		opacity 0.6s ease,
+		visibility 0.6s;
+}
+
+.panel_backdrop.is-open {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+/* 右側抽屜選單 */
+.panel {
+	position: fixed;
+	inset: 0 0 0 auto;
+	z-index: 1;
+	width: 80%;
+	/* 選單內容的左邊界，copyright 也吃這個值 */
+	--panel-pad: 8vw;
+	display: none;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	padding: 28vh 0 0 var(--panel-pad);
+	background: #f7f8f7;
+	color: #767676;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translateX(100%);
+	transition:
+		transform 0.6s cubic-bezier(0.76, 0, 0.24, 1),
+		visibility 0.6s;
+	font-family: 'Lora', serif;
+	font-weight: 600;
+}
+
+.panel.is-open {
+	visibility: visible;
+	pointer-events: auto;
+	transform: none;
+}
+
+.panel_list {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12vw;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-align: left;
+}
+
+.panel_socials {
+	display: flex;
+	gap: 2rem;
+}
+
+.panel_copy {
+	position: absolute;
+	left: var(--panel-pad);
+	bottom: var(--panel-pad);
+	margin: 0;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+.panel_link {
+	display: block;
+	font-size: clamp(2rem, 12vw, 3.5rem);
+	line-height: 1.1;
+	/* letter-spacing: 0.04em; */
+}
+
+.panel_icon svg {
+	display: block;
+	width: 26px;
+	height: 26px;
+	fill: currentColor;
+}
+
+@media (max-width: 768px) {
+	.nav {
+		align-items: center;
+		padding-block: 0.5rem;
+	}
+
+	.panel_link {
+		font-size: 1.75rem;
+	}
 	.nav_menu {
-		gap: 1.25rem;
-	}
-	.nav_pages,
-	.nav_socials {
-		gap: 1rem;
-	}
-	.nav_role {
 		display: none;
 	}
-	.nav {
-		padding-block: 1rem;
+
+	.nav_burger {
+		display: block;
+	}
+
+	.panel_backdrop {
+		display: block;
+	}
+
+	.panel {
+		display: flex;
 	}
 }
 </style>

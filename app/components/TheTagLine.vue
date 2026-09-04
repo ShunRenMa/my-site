@@ -3,7 +3,6 @@ defineProps({
 	text: { type: String, required: true },
 	repeat: { type: Number, default: 6 },
 	height: { type: String, default: '120dvh' },
-	// 文字那行的中線落在區塊頂端往下多少，給 % 就會跟著 height 縮放
 	top: { type: String, default: '80vh' },
 })
 </script>

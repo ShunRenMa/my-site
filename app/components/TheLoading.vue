@@ -10,6 +10,7 @@ const gone = ref(false)
 
 const dashoffset = computed(() => C * (1 - progress.value / 100))
 const label = computed(() => String(progress.value).padStart(3, '0'))
+const wipeEnd = useState('wipeEnd', () => false)
 
 function ready() {
 	const jobs = Array.from(document.images)
@@ -40,6 +41,7 @@ function finish() {
 	document.documentElement.style.overflow = ''
 	// 背景分頁不會派送 animationend，補一道保險
 	backstop = window.setTimeout(() => (gone.value = true), 1200)
+	wipeEnd.value = true
 }
 
 onMounted(() => {

@@ -52,7 +52,7 @@ const navArray = [
 						</ul>
 					</div>
 				</div>
-				<div :class="itemClass">
+				<div :class="[itemClass, 'copy_right_item']">
 					<div :class="itemContentClass" class="copyRight">
 						<p>{{ copyRight }}</p>
 					</div>
@@ -125,5 +125,18 @@ a:hover::after {
 }
 .nav_item {
 	flex: 1;
+}
+
+@media (max-width: 768px) {
+	footer {
+		font-size: 3.5vw;
+	}
+	.nav_area {
+		flex-wrap: wrap;
+	}
+	.copy_right_item {
+		flex-basis: 100%;
+		margin-top: 8vw;
+	}
 }
 </style>

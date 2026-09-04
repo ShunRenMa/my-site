@@ -9,6 +9,12 @@ import door from '../assets/images/Door.webp'
 import bottom from '../assets/images/bottom.webp'
 import autoSolve from '../assets/images/autoSolve.webp'
 import fullway from '../assets/images/fullway.webp'
+
+useSeo({
+	title: 'Baird MA / Frontend Engineer/Photographer - Works',
+	description: 'Frontend engineer and photographer in Taiwan.',
+})
+
 const works = {
 	ad: [
 		{
@@ -98,18 +104,39 @@ const sections = [
 	{ title: 'Tools', items: works.tools },
 	{ title: 'SOHO Works', items: works.soho },
 ]
+
+const root = useTemplateRef('root')
+let observer: IntersectionObserver | undefined
+
+onMounted(() => {
+	observer = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				if (!entry.isIntersecting) continue
+				entry.target.classList.add('is-inview')
+				observer?.unobserve(entry.target)
+			}
+		},
+		{ rootMargin: '0px 0px -30% 0px' },
+	)
+	root.value
+		?.querySelectorAll('.fadeUp')
+		.forEach((el) => observer?.observe(el))
+})
+
+onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
-	<section class="works">
-		<TheFadeUp tag="h1" class="works_pageTitle">> Portfolio</TheFadeUp>
+	<section ref="root" class="works">
+		<h1 class="works_pageTitle fadeUp">> Portfolio</h1>
 
 		<section
 			v-for="section in sections"
 			:key="section.title"
 			class="works_group"
 		>
-			<TheFadeUp tag="h2" class="works_heading">{{ section.title }}</TheFadeUp>
+			<h2 class="works_heading fadeUp">{{ section.title }}</h2>
 
 			<div class="works_list">
 				<WorkCard
@@ -131,6 +158,19 @@ const sections = [
 
 .works_group + .works_group {
 	margin-top: 16vh;
+}
+
+.fadeUp {
+	opacity: 0;
+	translate: 0 1.5rem;
+	transition:
+		opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1),
+		translate 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.fadeUp.is-inview {
+	opacity: 1;
+	translate: 0 0;
 }
 
 .works_pageTitle {
@@ -169,6 +209,14 @@ const sections = [
 
 .works_list > * {
 	width: var(--card-w);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.fadeUp {
+		opacity: 1;
+		translate: none;
+		transition: none;
+	}
 }
 
 @media (max-width: 768px) {

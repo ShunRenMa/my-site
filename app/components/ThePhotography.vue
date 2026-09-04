@@ -171,6 +171,10 @@ onBeforeUnmount(() => observer?.disconnect())
 	letter-spacing: 0.04em;
 	line-height: 1;
 	user-select: none;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
 }
 
 .photo_tagline_sub {

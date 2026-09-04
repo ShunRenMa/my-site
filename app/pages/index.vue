@@ -5,11 +5,13 @@ useSeo({
 	title: 'Baird MA / Frontend Engineer/Photographer',
 	description: 'Frontend engineer and photographer in Taiwan.',
 })
+
+const wipeEnd = useState('wipeEnd')
 </script>
 
 <template>
 	<div :class="layoutClass">
-		<section class="hero hero_block">
+		<section class="hero hero_block" :class="{ 'is-wipe-end': wipeEnd }">
 			<div class="hero_content">
 				<span class="hero_title_fst">
 					<div>
@@ -130,6 +132,11 @@ useSeo({
 	 * 兩個是不同的 CSS 屬性，所以兩個動畫可以同時掛在同一個元素上不打架。
 	 */
 	translate: 0 100%;
+}
+
+/* 等 loading 揭幕（wipeEnd）才掛動畫，不然字會在幕後面先跑完 */
+.is-wipe-end .hero_title_fst div span,
+.is-wipe-end .hero_title_sec div span {
 	animation:
 		char-rise 1s cubic-bezier(0.19, 1, 0.22, 1) both,
 		char-retract linear both;
@@ -308,7 +315,9 @@ useSeo({
 
 @media (prefers-reduced-motion: reduce) {
 	.hero_title_fst div span,
-	.hero_title_sec div span {
+	.hero_title_sec div span,
+	.is-wipe-end .hero_title_fst div span,
+	.is-wipe-end .hero_title_sec div span {
 		animation: none;
 		translate: none;
 	}

@@ -3,6 +3,9 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 	router.beforeResolve((to, from) => {
 		if (!document.startViewTransition) return
+		// Nuxt 第一次載入會導到自己
+		if (to.fullPath === from.fullPath) return
+
 		return new Promise((resolve) => {
 			document.startViewTransition(async () => {
 				resolve()

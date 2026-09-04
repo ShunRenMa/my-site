@@ -109,7 +109,7 @@ onBeforeUnmount(() => observer?.disconnect())
 					:class="[photo.taglinePos ?? 'bl', { 'is-inview': shown[`${i}-t`] }]"
 					:data-key="`${i}-t`"
 				>
-					{{ photo.tagline }}
+					<span class="photo_info_text">{{ photo.tagline }}</span>
 				</span>
 				<span
 					ref="infos"
@@ -117,7 +117,7 @@ onBeforeUnmount(() => observer?.disconnect())
 					:class="[photo.datePos ?? 'bl', { 'is-inview': shown[`${i}-d`] }]"
 					:data-key="`${i}-d`"
 				>
-					{{ photo.date }}
+					<span class="photo_info_text">{{ photo.date }}</span>
 				</span>
 			</article>
 		</div>
@@ -286,7 +286,10 @@ onBeforeUnmount(() => observer?.disconnect())
 	pointer-events: none;
 }
 
-/* 文字整塊露出來就自己播完，不跟捲動綁在一起 */
+/*
+ * 文字整塊露出來就自己播完，不跟捲動綁在一起。
+ * 色塊由 --from 那側長滿，再往 --to 收掉，收的同時把字刷出來。
+ */
 .photo_info {
 	position: absolute;
 	z-index: 1;
@@ -294,11 +297,66 @@ onBeforeUnmount(() => observer?.disconnect())
 	color: #fff;
 	line-height: 1.4;
 	user-select: none;
-	opacity: 0;
-	translate: 0 1rem;
-	transition:
-		opacity 0.8s ease-out,
-		translate 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+
+	--from: left;
+	--to: right;
+	--clip-hidden: inset(0 100% 0 0);
+	--block-color: #fff;
+}
+
+/* 色塊上下多吃一點，字才不會頂到邊；左右必須切齊，收邊和刷字才對得上 */
+.photo_info::after {
+	content: '';
+	position: absolute;
+	inset: -0.08em 0;
+	background-color: var(--block-color);
+	transform: scaleX(0);
+	transform-origin: var(--from) center;
+}
+
+.photo_info_text {
+	display: inline-block;
+	clip-path: var(--clip-hidden);
+}
+
+.photo_info.is-inview::after {
+	animation: info-block 0.9s both;
+}
+
+/* 0.45s = 色塊開始撤的時間，時長和緩動都跟它的收邊那段一致 */
+.photo_info.is-inview .photo_info_text {
+	animation: info-text 0.45s cubic-bezier(0.7, 0, 0.3, 1) 0.45s both;
+}
+
+@keyframes info-block {
+	0% {
+		transform: scaleX(0);
+		transform-origin: var(--from) center;
+		animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+	}
+	35% {
+		transform: scaleX(1);
+		transform-origin: var(--from) center;
+	}
+	/* 這段 scaleX 都是 1，趁畫面沒差別把 origin 換到另一邊 */
+	50% {
+		transform: scaleX(1);
+		transform-origin: var(--to) center;
+		animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+	}
+	100% {
+		transform: scaleX(0);
+		transform-origin: var(--to) center;
+	}
+}
+
+@keyframes info-text {
+	from {
+		clip-path: var(--clip-hidden);
+	}
+	to {
+		clip-path: inset(0 0 0 0);
+	}
 }
 
 .photo_info.tl,
@@ -320,6 +378,10 @@ onBeforeUnmount(() => observer?.disconnect())
 .photo_info.br {
 	right: var(--gutter);
 	text-align: right;
+
+	--from: right;
+	--to: left;
+	--clip-hidden: inset(0 0 0 100%);
 }
 
 .photo_info.is-inview {
@@ -332,12 +394,13 @@ onBeforeUnmount(() => observer?.disconnect())
 	font-weight: 700;
 	letter-spacing: 0.04em;
 	top: 4%;
+	/* 沒清掉 bl/br 的 bottom 的話，框會被上下拉滿，色塊就跟著鋪滿整條 */
+	bottom: auto;
 }
 
 .photo_info.date {
 	font-size: clamp(0.75rem, 1vw, 1rem);
 	letter-spacing: 0.14em;
-	/* 用顏色壓淡就好，改 opacity 會蓋掉進場用的那個 */
 	color: #ffffffcc;
 }
 
@@ -347,9 +410,11 @@ onBeforeUnmount(() => observer?.disconnect())
 		translate: none;
 		scale: none;
 	}
-	.photo_info {
-		opacity: 1;
-		translate: none;
+	.photo_info::after {
+		display: none;
+	}
+	.photo_info_text {
+		clip-path: none;
 	}
 	.photo_tagline .char > span {
 		translate: none;

@@ -230,9 +230,13 @@ const layoutClass = 'layout'
 	font-size: max(2.25rem, 4vw);
 	left: var(--gutter);
 	right: var(--gutter);
-	top: var(--gutter);
+	/* 標題中線落在第一屏由上往下多少，改這個數字就能上下調 */
+	--title-y: 25dvh;
+	top: var(--title-y);
+	/* 拉高半個身高，讓 --title-y 對到的是整塊的中線而不是上緣 */
+	translate: 0 -50%;
 	z-index: 1001;
-	text-align: center;
+	text-align: left;
 	color: white;
 	user-select: none;
 	letter-spacing: 0.2rem;

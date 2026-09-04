@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const DURATION = 2000
 const TIMEOUT = 4000
+// 揭幕動畫長度
+const OUT = 1700
+const BACKSTOP = OUT + 400
 const R = 54
 const C = 2 * Math.PI * R
 
@@ -40,8 +43,11 @@ function finish() {
 	leaving.value = true
 	document.documentElement.style.overflow = ''
 	// 背景分頁不會派送 animationend，補一道保險
-	backstop = window.setTimeout(() => (gone.value = true), 1200)
-	wipeEnd.value = true
+	backstop = window.setTimeout(() => (gone.value = true), BACKSTOP)
+
+	window.setTimeout(() => {
+		wipeEnd.value = true
+	}, OUT * 0.8)
 }
 
 onMounted(() => {
@@ -74,6 +80,7 @@ onBeforeUnmount(() => {
 		v-if="!gone"
 		class="loading"
 		:class="{ leaving }"
+		:style="{ '--out': `${OUT}ms` }"
 		@animationend.self="gone = true"
 	>
 		<div class="inner">
@@ -120,7 +127,8 @@ onBeforeUnmount(() => {
 	font-style: normal;
 }
 .loading.leaving {
-	animation: loading-out 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+	animation: loading-out var(--out) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+		forwards;
 }
 .loading.leaving .inner {
 	animation: loading-fade 0.35s ease-out forwards;

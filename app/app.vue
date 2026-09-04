@@ -3,4 +3,5 @@
     <NuxtRouteAnnouncer />
     <NuxtPage />
   </NuxtLayout>
+  <TheLoading />
 </template>

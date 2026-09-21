@@ -63,7 +63,7 @@ onMounted(() => {
 			t < KNEE
 				? 0.9 * (u < 0.5 ? 4 * u ** 3 : 1 - Math.pow(-2 * u + 2, 3) / 2)
 				: 0.9 + (0.1 * (t - KNEE)) / (1 - KNEE)
-		progress.value = Math.min(Math.round(eased * 100), 99)
+		progress.value = Math.min(Math.round(3 + eased * 97), 99)
 		raf = requestAnimationFrame(tick)
 	}
 	raf = requestAnimationFrame(tick)

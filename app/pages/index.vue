@@ -92,7 +92,7 @@ const wipeEnd = useState('wipeEnd')
 			<div class="hero_img_wrapper">
 				<img
 					src="~/assets/images/cover1.jpg"
-					alt="hero image"
+					alt="Curved staircase railings framing a clear blue sky"
 					class="hero__img"
 					fetchpriority="high"
 				/>

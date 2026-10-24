@@ -24,7 +24,7 @@ const skills = [
 	'Leadership',
 	'Jest',
 	'Git',
-	// 'UI/UX',
+	'UI/UX',
 	'＋',
 ]
 </script>
@@ -39,7 +39,7 @@ const skills = [
 			>
 				<img
 					src="~/assets/images/profile2.jpg"
-					alt="profile image"
+					alt="Portrait of Baird Ma holding a blue bouquet"
 					class="profile_img"
 					fetchpriority="high"
 				/>

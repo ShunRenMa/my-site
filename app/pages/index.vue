@@ -2,8 +2,31 @@
 const layoutClass = 'layout'
 
 useSeo({
-	title: 'Baird MA / Frontend Engineer/Photographer',
+	title: 'Frontend Engineer / Photographer',
 	description: 'Frontend engineer and photographer in Taiwan.',
+})
+
+useHead({
+	script: [
+		{
+			type: 'application/ld+json',
+			innerHTML: JSON.stringify({
+				'@context': 'https://schema.org',
+				'@type': 'Person',
+				name: 'Baird Ma',
+				alternateName: ['Shun Ren Ma', '馬舜仁'],
+				url: 'https://alupaka.tw',
+				jobTitle: ['Frontend Engineer', 'Photographer'],
+				address: { '@type': 'PostalAddress', addressCountry: 'TW' },
+				sameAs: [
+					'https://github.com/ShunRenMa',
+					'https://www.instagram.com/paka.ph_024/',
+					'https://www.linkedin.com/in/shun-ren-ma-94b42815a/',
+					'https://photography.alupaka.tw',
+				],
+			}),
+		},
+	],
 })
 
 const wipeEnd = useState('wipeEnd')

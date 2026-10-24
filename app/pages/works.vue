@@ -11,7 +11,7 @@ import autoSolve from '../assets/images/autoSolve.webp'
 import fullway from '../assets/images/fullway.webp'
 
 useSeo({
-	title: 'Baird MA / Frontend Engineer/Photographer - Works',
+	title: 'Works',
 	description: 'Frontend engineer and photographer in Taiwan.',
 })
 

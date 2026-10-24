@@ -20,7 +20,7 @@ export const useSeo = ({
 		title,
 		description,
 		// 社群平台不吃 titleTemplate，og 這邊得自己把站名補回去
-		ogTitle: `${title} | ${SITE_NAME}`,
+		ogTitle: `${SITE_NAME} | ${title}`,
 		ogDescription: description,
 		ogUrl: url,
 		ogImage: imageUrl,

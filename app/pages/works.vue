@@ -12,7 +12,7 @@ import fullway from '../assets/images/fullway.webp'
 
 useSeo({
 	title: 'Works',
-	description: 'Frontend engineer and photographer in Taiwan.',
+	description: 'Selected works by Baird Ma: interactive rich media ads, 3D and video ad formats, internal tools, and freelance websites.',
 })
 
 const works = {

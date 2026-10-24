@@ -11,8 +11,8 @@ import autoSolve from '../assets/images/autoSolve.webp'
 import fullway from '../assets/images/fullway.webp'
 
 useSeo({
-	title: 'Baird MA / Frontend Engineer/Photographer - Works',
-	description: 'Frontend engineer and photographer in Taiwan.',
+	title: 'Works',
+	description: 'Selected works by Baird Ma: interactive rich media ads, 3D and video ad formats, internal tools, and freelance websites.',
 })
 
 const works = {

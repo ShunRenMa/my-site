@@ -8,6 +8,7 @@ import p5 from '~/assets/images/p5.jpg'
 const photos = [
 	{
 		src: p4,
+		alt: 'Looking up through a white spiral staircase at a clear blue sky, Kaohsiung Station',
 		tagline: 'KAOHSIUNG',
 		taglinePos: 'tr',
 		date: '2025.03',
@@ -15,6 +16,7 @@ const photos = [
 	},
 	{
 		src: p3,
+		alt: 'Colorful floral silk lanterns hanging from a ceiling in Tainan',
 		tagline: 'TAINAN',
 		taglinePos: 'bl',
 		date: '2025.05',
@@ -22,6 +24,7 @@ const photos = [
 	},
 	{
 		src: p5,
+		alt: 'Mirrored tunnel reflecting blue sky and trees, Setouchi',
 		tagline: 'SETOUCHI',
 		taglinePos: 'bl',
 		date: '2024.10',
@@ -29,6 +32,7 @@ const photos = [
 	},
 	{
 		src: p2,
+		alt: 'Dark covered alley opening onto a bright street in Tainan',
 		tagline: 'TAINAN',
 		taglinePos: 'bl',
 		date: '2026.07',
@@ -109,7 +113,7 @@ onBeforeUnmount(() => observer?.disconnect())
 				:data-key="i"
 			>
 				<div class="photo_img">
-					<img :src="photo.src" alt="" loading="lazy" />
+					<img :src="photo.src" :alt="photo.alt" loading="lazy" />
 				</div>
 				<span
 					class="photo_info tagline"

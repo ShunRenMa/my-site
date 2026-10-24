@@ -6,7 +6,7 @@ export default defineNuxtConfig({
 	app: {
 		head: {
 			htmlAttrs: { lang: 'zh-Hant' },
-			titleTemplate: '%s | Baird Ma',
+			titleTemplate: 'Baird Ma | %s',
 			meta: [
 				{
 					property: 'og:site_name',

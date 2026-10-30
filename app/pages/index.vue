@@ -88,6 +88,7 @@ const wipeEnd = useState('wipeEnd')
 					</div>
 				</span>
 			</div>
+			<span class="hero_scrolltext" aria-hidden="true">Scroll</span>
 			<span class="hero_scrollline" aria-hidden="true"></span>
 			<div class="hero_img_wrapper">
 				<img
@@ -236,6 +237,19 @@ const wipeEnd = useState('wipeEnd')
 	overflow: hidden;
 	position: relative;
 	z-index: 1000;
+}
+
+.hero_scrolltext {
+	position: absolute;
+	left: var(--gutter);
+	bottom: calc(60vh + 0.75rem);
+	z-index: 1001;
+	translate: -50% 0;
+	writing-mode: vertical-rl;
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.2em;
+	color: #767676;
 }
 
 .hero_scrollline {
